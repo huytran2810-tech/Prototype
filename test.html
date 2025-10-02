@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Warehouse System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 10px; padding: 10px; background: #f8f9fa; border: 1px solid #e9ecef; }
+    </style>
+</head>
+<body>
+    <h1>Test Warehouse System Functions</h1>
+    
+    <div class="test-section">
+        <h2>Test Functions</h2>
+        <button onclick="testShowProductBatchDetails()">Test showProductBatchDetails</button>
+        <button onclick="testShowBatchDetails()">Test showBatchDetails</button>
+        <button onclick="testData()">Test Data Loading</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // Copy necessary functions from script.js for testing
+        let inventory = [];
+        let batches = [];
+        
+        function testData() {
+            // Load sample data
+            inventory = [
+                {
+                    code: 'G001',
+                    name: 'Gạch men 30x30 Viglacera',
+                    category: 'Gạch men',
+                    size: '30x30cm',
+                    color: 'Trắng',
+                    unit: 'Viên',
+                    importPrice: 45000,
+                    referencePrice: 55000,
+                    stock: 500,
+                    supplier: 'Viglacera'
+                }
+            ];
+            
+            batches = [
+                {
+                    id: 'LOT001',
+                    importDate: '2024-09-01',
+                    expiryDate: '2026-09-01',
+                    supplier: 'Viglacera',
+                    status: 'active',
+                    products: [
+                        {
+                            productCode: 'G001',
+                            productName: 'Gạch men 30x30 Viglacera',
+                            quantity: 300,
+                            used: 0,
+                            remaining: 300
+                        }
+                    ]
+                }
+            ];
+            
+            document.getElementById('result').innerHTML = `
+                <h3>Data Loaded Successfully!</h3>
+                <p>Inventory: ${inventory.length} products</p>
+                <p>Batches: ${batches.length} batches</p>
+                <p>First product: ${inventory[0].name}</p>
+                <p>First batch: ${batches[0].id} with ${batches[0].products.length} products</p>
+            `;
+        }
+        
+        function testShowProductBatchDetails() {
+            if (inventory.length === 0) {
+                testData();
+            }
+            
+            const productCode = 'G001';
+            const product = inventory.find(p => p.code === productCode);
+            
+            if (!product) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Product not found!</p>';
+                return;
+            }
+            
+            // Find all batches containing this product
+            const productBatches = [];
+            batches.forEach(batch => {
+                const productInBatch = batch.products.find(p => p.productCode === productCode);
+                if (productInBatch) {
+                    productBatches.push({
+                        batch: batch,
+                        product: productInBatch
+                    });
+                }
+            });
+            
+            let html = `<h3>Product Batch Details for ${product.name}</h3>`;
+            html += `<p>Found ${productBatches.length} batches containing this product:</p>`;
+            html += '<ul>';
+            
+            productBatches.forEach(({ batch, product }) => {
+                html += `<li>Batch ${batch.id}: ${product.quantity} total, ${product.remaining} remaining</li>`;
+            });
+            
+            html += '</ul>';
+            document.getElementById('result').innerHTML = html;
+        }
+        
+        function testShowBatchDetails() {
+            if (batches.length === 0) {
+                testData();
+            }
+            
+            const batchId = 'LOT001';
+            const batch = batches.find(b => b.id === batchId);
+            
+            if (!batch) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Batch not found!</p>';
+                return;
+            }
+            
+            let html = `<h3>Batch Details for ${batch.id}</h3>`;
+            html += `<p><strong>Supplier:</strong> ${batch.supplier}</p>`;
+            html += `<p><strong>Import Date:</strong> ${batch.importDate}</p>`;
+            html += `<p><strong>Products in batch:</strong></p>`;
+            html += '<ul>';
+            
+            batch.products.forEach(product => {
+                html += `<li>${product.productCode} - ${product.productName}: ${product.quantity} total, ${product.remaining} remaining</li>`;
+            });
+            
+            html += '</ul>';
+            document.getElementById('result').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

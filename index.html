@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Kho Gạch</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-warehouse"></i> Hệ Thống Quản Lý Kho Gạch</h1>
+            <nav>
+                <button class="nav-btn active" data-page="inventory">
+                    <i class="fas fa-boxes"></i> Kho Hàng
+                </button>
+                <button class="nav-btn" data-page="import">
+                    <i class="fas fa-plus-circle"></i> Nhập Kho
+                </button>
+                <button class="nav-btn" data-page="orders">
+                    <i class="fas fa-shopping-cart"></i> Đơn Hàng
+                </button>
+                <button class="nav-btn" data-page="batches">
+                    <i class="fas fa-layer-group"></i> Quản Lý Lô
+                </button>
+                <button class="nav-btn" data-page="reports">
+                    <i class="fas fa-chart-bar"></i> Báo Cáo
+                </button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Trang Kho Hàng -->
+            <div id="inventory-page" class="page active">
+                <div class="page-header">
+                    <h2><i class="fas fa-boxes"></i> Danh Sách Gạch Trong Kho</h2>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <input type="text" id="search-inventory" placeholder="Tìm kiếm sản phẩm...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <button class="btn btn-success" id="export-inventory-btn">
+                            <i class="fas fa-file-excel"></i> Xuất Excel
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mã SP
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="0" placeholder="Lọc mã SP...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Tên Sản Phẩm
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="1" placeholder="Lọc tên...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Danh Mục
+                                    <div class="column-filter">
+                                        <select class="filter-select" data-column="2">
+                                            <option value="">Tất cả</option>
+                                            <option value="Gạch men">Gạch men</option>
+                                            <option value="Gạch granite">Gạch granite</option>
+                                            <option value="Gạch ốp tường">Gạch ốp tường</option>
+                                            <option value="Gạch lát nền">Gạch lát nền</option>
+                                            <option value="Gạch mosaic">Gạch mosaic</option>
+                                            <option value="Gạch terrazzo">Gạch terrazzo</option>
+                                            <option value="Gạch ceramic">Gạch ceramic</option>
+                                            <option value="Gạch porcelain">Gạch porcelain</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>
+                                    Kích Thước
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="3" placeholder="Lọc kích thước...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Màu Định Nghĩa
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="4" placeholder="Lọc màu...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Đơn Vị
+                                    <div class="column-filter">
+                                        <select class="filter-select" data-column="5">
+                                            <option value="">Tất cả</option>
+                                            <option value="Viên">Viên</option>
+                                            <option value="Tấm">Tấm</option>
+                                            <option value="Hộp">Hộp</option>
+                                            <option value="M²">M²</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>
+                                    Giá Nhập
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="6" placeholder="Giá từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Giá Tham Chiếu
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="7" placeholder="Giá từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Tồn Kho
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="8" placeholder="Số lượng...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Trạng Thái
+                                    <div class="column-filter">
+                                        <select class="filter-select" data-column="9">
+                                            <option value="">Tất cả</option>
+                                            <option value="Còn hàng">Còn hàng</option>
+                                            <option value="Sắp hết">Sắp hết</option>
+                                            <option value="Hết hàng">Hết hàng</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>Chi Tiết Lô</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-tbody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Trang Nhập Kho -->
+            <div id="import-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-plus-circle"></i> Nhập Kho Gạch</h2>
+                </div>
+                <div class="form-container">
+                    <form id="import-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-code">Mã Sản Phẩm:</label>
+                                <input type="text" id="product-code" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-name">Tên Sản Phẩm:</label>
+                                <input type="text" id="product-name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-category">Danh Mục:</label>
+                                <select id="product-category" required>
+                                    <option value="">Chọn danh mục</option>
+                                    <option value="Gạch men">Gạch men</option>
+                                    <option value="Gạch granite">Gạch granite</option>
+                                    <option value="Gạch ốp tường">Gạch ốp tường</option>
+                                    <option value="Gạch lát nền">Gạch lát nền</option>
+                                    <option value="Gạch mosaic">Gạch mosaic</option>
+                                    <option value="Gạch terrazzo">Gạch terrazzo</option>
+                                    <option value="Gạch ceramic">Gạch ceramic</option>
+                                    <option value="Gạch porcelain">Gạch porcelain</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-unit">Đơn Vị:</label>
+                                <select id="product-unit" required>
+                                    <option value="">Chọn đơn vị</option>
+                                    <option value="Viên">Viên</option>
+                                    <option value="Tấm">Tấm</option>
+                                    <option value="Hộp">Hộp</option>
+                                    <option value="M²">M²</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-size">Kích Thước:</label>
+                                <input type="text" id="product-size" placeholder="VD: 30x30cm" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-color">Màu Sắc:</label>
+                                <input type="text" id="product-color" placeholder="VD: Trắng, Xám đá..." required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="import-price">Giá Nhập (VNĐ):</label>
+                                <input type="number" id="import-price" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sell-price">Giá Tham Chiếu (VNĐ):</label>
+                                <input type="number" id="sell-price" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="import-quantity">Số Lượng Nhập:</label>
+                                <input type="number" id="import-quantity" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="supplier">Nhà Cung Cấp:</label>
+                                <input type="text" id="supplier">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Nhập Kho
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-undo"></i> Làm Mới
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Trang Đơn Hàng -->
+            <div id="orders-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-shopping-cart"></i> Quản Lý Đơn Hàng</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-success" id="export-orders-btn">
+                            <i class="fas fa-file-excel"></i> Xuất Excel
+                        </button>
+                        <button class="btn btn-primary" id="new-order-btn">
+                            <i class="fas fa-plus"></i> Tạo Đơn Hàng Mới
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Form tạo đơn hàng -->
+                <div id="order-form-container" class="form-container" style="display: none;">
+                    <h3>Tạo Đơn Hàng Mới</h3>
+                    <form id="order-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="order-id">Mã Đơn Hàng:</label>
+                                <input type="text" id="order-id" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer-name">Tên Khách Hàng:</label>
+                                <input type="text" id="customer-name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customer-phone">Số Điện Thoại:</label>
+                                <input type="tel" id="customer-phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer-address">Địa Chỉ:</label>
+                                <input type="text" id="customer-address" required>
+                            </div>
+                        </div>
+                        
+                        <h4>Sản Phẩm Đặt Hàng</h4>
+                        <div class="order-items">
+                            <div class="order-item">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Mã Sản Phẩm:</label>
+                                        <select class="product-select" required>
+                                            <option value="">Chọn sản phẩm</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Số Lượng:</label>
+                                        <input type="number" class="quantity-input" min="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Đơn Giá Bán:</label>
+                                        <input type="number" class="price-input" min="0" placeholder="Nhập giá bán...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Thành Tiền:</label>
+                                        <input type="number" class="total-input" readonly>
+                                    </div>
+                                    <button type="button" class="btn btn-danger remove-item">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="add-item-btn" class="btn btn-secondary">
+                                <i class="fas fa-plus"></i> Thêm Sản Phẩm
+                            </button>
+                            <div class="total-amount">
+                                <strong>Tổng Tiền: <span id="grand-total">0</span> VNĐ</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Lưu Đơn Hàng
+                            </button>
+                            <button type="button" id="cancel-order-btn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Danh sách đơn hàng -->
+                <div class="table-container">
+                    <table id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mã Đơn
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="0" placeholder="Lọc mã đơn...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Khách Hàng
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="1" placeholder="Lọc khách hàng...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Ngày Tạo
+                                    <div class="column-filter">
+                                        <input type="date" class="filter-input" data-column="2">
+                                    </div>
+                                </th>
+                                <th>
+                                    Tổng Tiền
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="3" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Trạng Thái
+                                    <div class="column-filter">
+                                        <select class="filter-select" data-column="4">
+                                            <option value="">Tất cả</option>
+                                            <option value="Chờ xử lý">Chờ xử lý</option>
+                                            <option value="Đã hoàn thành">Đã hoàn thành</option>
+                                            <option value="Đã hủy">Đã hủy</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Trang Quản Lý Lô Hàng -->
+            <div id="batches-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-layer-group"></i> Quản Lý Lô Hàng</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-success" id="export-batches-btn">
+                            <i class="fas fa-file-excel"></i> Xuất Excel
+                        </button>
+                        <button class="btn btn-primary" id="new-batch-btn">
+                            <i class="fas fa-plus"></i> Tạo Lô Mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form tạo lô hàng -->
+                <div id="batch-form-container" class="form-container" style="display: none;">
+                    <h3>Tạo Lô Hàng Mới</h3>
+                    <form id="batch-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="batch-code">Mã Lô:</label>
+                                <input type="text" id="batch-code" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="batch-product">Sản Phẩm:</label>
+                                <select id="batch-product" required>
+                                    <option value="">Chọn sản phẩm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="batch-quantity">Số Lượng:</label>
+                                <input type="number" id="batch-quantity" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="batch-import-date">Ngày Nhập:</label>
+                                <input type="date" id="batch-import-date" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="batch-supplier">Nhà Cung Cấp:</label>
+                                <input type="text" id="batch-supplier">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Lưu Lô Hàng
+                            </button>
+                            <button type="button" id="cancel-batch-btn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Danh sách lô hàng -->
+                <div class="table-container">
+                    <table id="batches-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mã Lô
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="0" placeholder="Lọc mã lô...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Ngày Nhập
+                                    <div class="column-filter">
+                                        <input type="date" class="filter-input" data-column="1">
+                                    </div>
+                                </th>
+                                <th>
+                                    Nhà Cung Cấp
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="2" placeholder="Lọc nhà cung cấp...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Số Loại SP
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="3" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Tổng Số Lượng
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="4" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Đã Sử Dụng
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="5" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Còn Lại
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="6" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Trạng Thái
+                                    <div class="column-filter">
+                                        <select class="filter-select" data-column="7">
+                                            <option value="">Tất cả</option>
+                                            <option value="Còn hàng">Còn hàng</option>
+                                            <option value="Hết hàng">Hết hàng</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="batches-tbody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Trang Báo Cáo -->
+            <div id="reports-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-chart-bar"></i> Báo Cáo Tồn Kho</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-success" id="export-summary-btn">
+                            <i class="fas fa-file-excel"></i> Xuất Báo Cáo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tồn kho tổng quát -->
+                <div class="report-section">
+                    <h3>Tồn Kho Tổng Quát</h3>
+                    <div class="table-container">
+                        <table id="inventory-summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Danh Mục</th>
+                                    <th>Tổng Tồn Kho</th>
+                                    <th>Số Lô</th>
+                                    <th>Giá Trị Tồn Kho</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-summary-tbody">
+                                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tồn kho chi tiết theo lô -->
+                <div class="report-section">
+                    <h3>Tồn Kho Chi Tiết Theo Lô</h3>
+                    <div class="table-container">
+                        <table id="inventory-detail-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Lô</th>
+                                <th>Ngày Nhập</th>
+                                <th>Nhà Cung Cấp</th>
+                                <th>Trạng Thái</th>
+                                <th>Mã SP</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Số Lượng Ban Đầu</th>
+                                <th>Đã Sử Dụng</th>
+                                <th>Còn Lại</th>
+                            </tr>
+                        </thead>
+                            <tbody id="inventory-detail-tbody">
+                                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal xem chi tiết đơn hàng -->
+    <div id="order-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chi Tiết Đơn Hàng</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="order-detail-content">
+                <!-- Nội dung chi tiết đơn hàng -->
+            </div>
+            <div class="modal-footer">
+                <button id="export-order-full-btn" class="btn btn-primary">
+                    <i class="fas fa-print"></i> Xuất Phiếu Đầy Đủ
+                </button>
+                <button id="export-order-simple-btn" class="btn btn-warning">
+                    <i class="fas fa-print"></i> Xuất Phiếu Không Giá
+                </button>
+                <button class="btn btn-secondary close-modal">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xem chi tiết lô hàng của sản phẩm -->
+    <div id="product-batch-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chi Tiết Lô Hàng - <span id="product-batch-title"></span></h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="table-container">
+                    <table id="product-batch-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Lô</th>
+                                <th>Ngày Nhập</th>
+                                <th>Ngày Hết Hạn</th>
+                                <th>Nhà Cung Cấp</th>
+                                <th>Số Lượng Ban Đầu</th>
+                                <th>Đã Sử Dụng</th>
+                                <th>Còn Lại</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-batch-tbody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xem chi tiết lô hàng -->
+    <div id="batch-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chi Tiết Lô Hàng - <span id="batch-detail-title"></span></h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="batch-info">
+                    <div class="info-row">
+                        <strong>Mã Lô:</strong> <span id="batch-detail-id"></span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Ngày Nhập:</strong> <span id="batch-detail-import-date"></span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Nhà Cung Cấp:</strong> <span id="batch-detail-supplier"></span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Trạng Thái:</strong> <span id="batch-detail-status"></span>
+                    </div>
+                </div>
+                <h4>Danh Sách Sản Phẩm Trong Lô:</h4>
+                <div class="table-container">
+                    <table id="batch-detail-table">
+                        <thead>
+                            <tr>
+                                <th>Mã SP</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Danh Mục</th>
+                                <th>Kích Thước</th>
+                                <th>Màu Định Nghĩa</th>
+                                <th>Đơn Vị</th>
+                                <th>Giá Nhập</th>
+                                <th>Giá Tham Chiếu</th>
+                                <th>Số Lượng Ban Đầu</th>
+                                <th>Đã Sử Dụng</th>
+                                <th>Còn Lại</th>
+                            </tr>
+                        </thead>
+                        <tbody id="batch-detail-tbody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal sửa lô hàng -->
+    <div id="edit-batch-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sửa Lô Hàng - <span id="edit-batch-title"></span></h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="edit-batch-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-batch-id">Mã Lô:</label>
+                            <input type="text" id="edit-batch-id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-batch-import-date">Ngày Nhập:</label>
+                            <input type="date" id="edit-batch-import-date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-batch-supplier">Nhà Cung Cấp:</label>
+                            <input type="text" id="edit-batch-supplier">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-batch-status">Trạng Thái:</label>
+                            <select id="edit-batch-status">
+                                <option value="active">Còn hàng</option>
+                                <option value="inactive">Hết hàng</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <h4>Danh Sách Sản Phẩm Trong Lô:</h4>
+                <div class="table-container">
+                    <table id="edit-batch-products-table">
+                        <thead>
+                            <tr>
+                                <th>Mã SP</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Số Lượng Ban Đầu</th>
+                                <th>Đã Sử Dụng</th>
+                                <th>Còn Lại</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="edit-batch-products-tbody">
+                            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save-batch-btn" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Lưu Thay Đổi
+                </button>
+                <button class="btn btn-secondary close-modal">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
