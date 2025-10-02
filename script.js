@@ -1,1172 +1,179 @@
-// Warehouse Management System JavaScript
+// Professional Warehouse Management System
+// Data structure similar to professional warehouse applications
 
-// Global variables
-let inventory = [];
+// Sample data - Original structure
+let inventory = [
+    {
+        id: 1,
+        code: 'G001',
+        name: 'Gạch men 30x30 Viglacera',
+        category: 'Gạch men',
+        unit: 'Viên',
+        size: '30x30cm',
+        color: 'Trắng',
+        importPrice: 45000,
+        referencePrice: 55000,
+        stock: 500,
+        supplier: 'Viglacera',
+        batches: [
+            { batchId: 'L001', quantity: 300, used: 0 },
+            { batchId: 'L002', quantity: 200, used: 0 }
+        ]
+    },
+    {
+        id: 2,
+        code: 'G002',
+        name: 'Gạch granite 60x60 Đồng Tâm',
+        category: 'Gạch granite',
+        unit: 'Viên',
+        size: '60x60cm',
+        color: 'Xám đá',
+        importPrice: 120000,
+        referencePrice: 150000,
+        stock: 200,
+        supplier: 'Đồng Tâm',
+        batches: [
+            { batchId: 'L001', quantity: 200, used: 0 }
+        ]
+    },
+    {
+        id: 3,
+        code: 'G003',
+        name: 'Gạch ốp tường 25x40 Prime',
+        category: 'Gạch ốp tường',
+        unit: 'Viên',
+        size: '25x40cm',
+        color: 'Kem',
+        importPrice: 35000,
+        referencePrice: 45000,
+        stock: 800,
+        supplier: 'Prime Group',
+        batches: [
+            { batchId: 'L002', quantity: 800, used: 0 }
+        ]
+    },
+    {
+        id: 4,
+        code: 'G004',
+        name: 'Gạch lát nền 80x80 Mikado',
+        category: 'Gạch lát nền',
+        unit: 'Viên',
+        size: '80x80cm',
+        color: 'Vân gỗ',
+        importPrice: 180000,
+        referencePrice: 220000,
+        stock: 150,
+        supplier: 'Mikado',
+        batches: [
+            { batchId: 'L001', quantity: 100, used: 0 },
+            { batchId: 'L003', quantity: 50, used: 0 }
+        ]
+    },
+    {
+        id: 5,
+        code: 'G005',
+        name: 'Gạch mosaic thủy tinh',
+        category: 'Gạch mosaic',
+        unit: 'Tấm',
+        size: '30x30cm',
+        color: 'Xanh dương',
+        importPrice: 25000,
+        referencePrice: 35000,
+        stock: 300,
+        supplier: 'Mosaic Pro',
+        batches: [
+            { batchId: 'L003', quantity: 300, used: 0 }
+        ]
+    },
+    {
+        id: 6,
+        code: 'G006',
+        name: 'Gạch ceramic 40x40',
+        category: 'Gạch ceramic',
+        unit: 'Viên',
+        size: '40x40cm',
+        color: 'Be',
+        importPrice: 28000,
+        referencePrice: 38000,
+        stock: 400,
+        supplier: 'Ceramic Plus',
+        batches: [
+            { batchId: 'L001', quantity: 200, used: 0 },
+            { batchId: 'L002', quantity: 200, used: 0 }
+        ]
+    },
+    {
+        id: 7,
+        code: 'G007',
+        name: 'Gạch porcelain 60x60',
+        category: 'Gạch porcelain',
+        unit: 'Viên',
+        size: '60x60cm',
+        color: 'Trắng sứ',
+        importPrice: 95000,
+        referencePrice: 125000,
+        stock: 120,
+        supplier: 'Porcelain Elite',
+        batches: [
+            { batchId: 'L003', quantity: 120, used: 0 }
+        ]
+    },
+    {
+        id: 8,
+        code: 'G008',
+        name: 'Gạch terrazzo 50x50',
+        category: 'Gạch terrazzo',
+        unit: 'Viên',
+        size: '50x50cm',
+        color: 'Xám đá',
+        importPrice: 75000,
+        referencePrice: 95000,
+        stock: 180,
+        supplier: 'Terrazzo Master',
+        batches: [
+            { batchId: 'L001', quantity: 100, used: 0 },
+            { batchId: 'L002', quantity: 80, used: 0 }
+        ]
+    }
+];
+
 let orders = [];
-let batches = [];
+let batches = [
+    {
+        id: 'L001',
+        date: '2024-01-15',
+        supplier: 'Công ty Gạch Men ABC',
+        products: [
+            { productId: 1, quantity: 500, used: 0 },
+            { productId: 4, quantity: 300, used: 0 }
+        ],
+        status: 'Còn hàng'
+    },
+    {
+        id: 'L002',
+        date: '2024-01-20',
+        supplier: 'Công ty Gạch Men ABC',
+        products: [
+            { productId: 1, quantity: 500, used: 0 },
+            { productId: 3, quantity: 800, used: 0 }
+        ],
+        status: 'Còn hàng'
+    },
+    {
+        id: 'L003',
+        date: '2024-01-25',
+        supplier: 'Công ty Gạch Granite XYZ',
+        products: [
+            { productId: 2, quantity: 500, used: 0 },
+            { productId: 4, quantity: 300, used: 0 },
+            { productId: 5, quantity: 200, used: 0 }
+        ],
+        status: 'Còn hàng'
+    }
+];
+
 let currentOrderId = 1;
-let currentBatchId = 1;
-
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-    loadSampleData();
-    setupEventListeners();
-    updateInventoryDisplay();
-    updateOrdersDisplay();
-});
-
-// Initialize application
-function initializeApp() {
-    // Load data from localStorage if available
-    const savedInventory = localStorage.getItem('warehouse_inventory');
-    const savedOrders = localStorage.getItem('warehouse_orders');
-    const savedBatches = localStorage.getItem('warehouse_batches');
-    const savedOrderId = localStorage.getItem('current_order_id');
-    const savedBatchId = localStorage.getItem('current_batch_id');
-    
-    if (savedInventory) {
-        inventory = JSON.parse(savedInventory);
-    }
-    
-    if (savedOrders) {
-        orders = JSON.parse(savedOrders);
-    }
-    
-    if (savedBatches) {
-        batches = JSON.parse(savedBatches);
-    }
-    
-    if (savedOrderId) {
-        currentOrderId = parseInt(savedOrderId);
-    }
-    
-    if (savedBatchId) {
-        currentBatchId = parseInt(savedBatchId);
-    }
-}
-
-// Load sample data for demonstration
-function loadSampleData() {
-    if (inventory.length === 0) {
-        inventory = [
-            {
-                code: 'G001',
-                name: 'Gạch men 30x30 Viglacera',
-                category: 'Gạch men',
-                unit: 'Viên',
-                size: '30x30cm',
-                color: 'Trắng',
-                importPrice: 45000,
-                referencePrice: 55000,
-                stock: 500,
-                supplier: 'Viglacera'
-            },
-            {
-                code: 'G002',
-                name: 'Gạch granite 60x60 Đồng Tâm',
-                category: 'Gạch granite',
-                unit: 'Viên',
-                size: '60x60cm',
-                color: 'Xám đá',
-                importPrice: 120000,
-                referencePrice: 150000,
-                stock: 200,
-                supplier: 'Đồng Tâm'
-            },
-            {
-                code: 'G003',
-                name: 'Gạch ốp tường 25x40 Prime',
-                category: 'Gạch ốp tường',
-                unit: 'Viên',
-                size: '25x40cm',
-                color: 'Kem',
-                importPrice: 35000,
-                referencePrice: 45000,
-                stock: 800,
-                supplier: 'Prime Group'
-            },
-            {
-                code: 'G004',
-                name: 'Gạch lát nền 80x80 Mikado',
-                category: 'Gạch lát nền',
-                unit: 'Viên',
-                size: '80x80cm',
-                color: 'Vân gỗ',
-                importPrice: 180000,
-                referencePrice: 220000,
-                stock: 150,
-                supplier: 'Mikado'
-            },
-            {
-                code: 'G005',
-                name: 'Gạch mosaic thủy tinh',
-                category: 'Gạch mosaic',
-                unit: 'Tấm',
-                size: '30x30cm',
-                color: 'Xanh biển',
-                importPrice: 250000,
-                referencePrice: 320000,
-                stock: 50,
-                supplier: 'Mosaic Việt'
-            },
-            {
-                code: 'G006',
-                name: 'Gạch terrazzo 40x40',
-                category: 'Gạch terrazzo',
-                unit: 'Viên',
-                size: '40x40cm',
-                color: 'Đỏ gạch',
-                importPrice: 65000,
-                referencePrice: 85000,
-                stock: 300,
-                supplier: 'Terrazzo Hà Nội'
-            },
-            {
-                code: 'G007',
-                name: 'Gạch ceramic 20x20 Saigon',
-                category: 'Gạch ceramic',
-                unit: 'Viên',
-                size: '20x20cm',
-                color: 'Vàng kem',
-                importPrice: 25000,
-                referencePrice: 35000,
-                stock: 1000,
-                supplier: 'Saigon Ceramic'
-            },
-            {
-                code: 'G008',
-                name: 'Gạch porcelain 120x60 Luxury',
-                category: 'Gạch porcelain',
-                unit: 'Viên',
-                size: '120x60cm',
-                color: 'Marble trắng',
-                importPrice: 350000,
-                referencePrice: 450000,
-                stock: 80,
-                supplier: 'Luxury Tiles'
-            }
-        ];
-        saveInventoryToStorage();
-    }
-    
-    // Load sample orders if none exist
-    if (orders.length === 0) {
-        orders = [
-            {
-                id: 'DH0001',
-                customerName: 'Công ty TNHH Xây Dựng ABC',
-                customerPhone: '0901234567',
-                customerAddress: '123 Đường Lê Lợi, Quận 1, TP.HCM',
-                date: new Date('2024-09-15').toISOString(),
-                status: 'completed',
-                items: [
-                    {
-                        productCode: 'G001',
-                        productName: 'Gạch men 30x30 Viglacera',
-                        quantity: 100,
-                        price: 52000,
-                        total: 5200000
-                    },
-                    {
-                        productCode: 'G003',
-                        productName: 'Gạch ốp tường 25x40 Prime',
-                        quantity: 50,
-                        price: 42000,
-                        total: 2100000
-                    }
-                ],
-                total: 7300000
-            },
-            {
-                id: 'DH0002',
-                customerName: 'Anh Nguyễn Văn Minh',
-                customerPhone: '0987654321',
-                customerAddress: '456 Đường Nguyễn Huệ, Quận 3, TP.HCM',
-                date: new Date('2024-09-20').toISOString(),
-                status: 'completed',
-                items: [
-                    {
-                        productCode: 'G002',
-                        productName: 'Gạch granite 60x60 Đồng Tâm',
-                        quantity: 80,
-                        price: 145000,
-                        total: 11600000
-                    }
-                ],
-                total: 11600000
-            },
-            {
-                id: 'DH0003',
-                customerName: 'Chị Trần Thị Lan',
-                customerPhone: '0912345678',
-                customerAddress: '789 Đường Võ Văn Tần, Quận 10, TP.HCM',
-                date: new Date('2024-09-25').toISOString(),
-                status: 'exported',
-                items: [
-                    {
-                        productCode: 'G004',
-                        productName: 'Gạch lát nền 80x80 Mikado',
-                        quantity: 60,
-                        price: 210000,
-                        total: 12600000
-                    },
-                    {
-                        productCode: 'G007',
-                        productName: 'Gạch ceramic 20x20 Saigon',
-                        quantity: 200,
-                        price: 32000,
-                        total: 6400000
-                    }
-                ],
-                total: 19000000
-            }
-        ];
-        currentOrderId = 4;
-        saveOrdersToStorage();
-        saveCurrentOrderIdToStorage();
-    }
-    
-    // Load sample batches if none exist
-    if (batches.length === 0) {
-        batches = [
-            {
-                id: 'LOT001',
-                importDate: '2024-09-01',
-                supplier: 'Viglacera',
-                status: 'active',
-                products: [
-                    {
-                        productCode: 'G001',
-                        productName: 'Gạch men 30x30 Viglacera',
-                        quantity: 300,
-                        used: 0,
-                        remaining: 300
-                    },
-                    {
-                        productCode: 'G002',
-                        productName: 'Gạch granite 60x60 Đồng Tâm',
-                        quantity: 200,
-                        used: 0,
-                        remaining: 200
-                    },
-                    {
-                        productCode: 'G003',
-                        productName: 'Gạch ốp tường 25x40 Prime',
-                        quantity: 500,
-                        used: 0,
-                        remaining: 500
-                    }
-                ]
-            },
-            {
-                id: 'LOT002',
-                importDate: '2024-08-15',
-                supplier: 'Viglacera',
-                status: 'active',
-                products: [
-                    {
-                        productCode: 'G001',
-                        productName: 'Gạch men 30x30 Viglacera',
-                        quantity: 200,
-                        used: 100,
-                        remaining: 100
-                    },
-                    {
-                        productCode: 'G004',
-                        productName: 'Gạch lát nền 80x80 Mikado',
-                        quantity: 150,
-                        used: 0,
-                        remaining: 150
-                    }
-                ]
-            },
-            {
-                id: 'LOT003',
-                importDate: '2024-09-10',
-                supplier: 'Đồng Tâm',
-                status: 'active',
-                products: [
-                    {
-                        productCode: 'G005',
-                        productName: 'Gạch mosaic thủy tinh',
-                        quantity: 50,
-                        used: 0,
-                        remaining: 50
-                    },
-                    {
-                        productCode: 'G006',
-                        productName: 'Gạch terrazzo 40x40',
-                        quantity: 300,
-                        used: 50,
-                        remaining: 250
-                    },
-                    {
-                        productCode: 'G007',
-                        productName: 'Gạch ceramic 20x20 Saigon',
-                        quantity: 1000,
-                        used: 200,
-                        remaining: 800
-                    }
-                ]
-            },
-            {
-                id: 'LOT004',
-                importDate: '2024-09-20',
-                supplier: 'Prime Group',
-                status: 'active',
-                products: [
-                    {
-                        productCode: 'G003',
-                        productName: 'Gạch ốp tường 25x40 Prime',
-                        quantity: 300,
-                        used: 0,
-                        remaining: 300
-                    },
-                    {
-                        productCode: 'G008',
-                        productName: 'Gạch porcelain 120x60 Luxury',
-                        quantity: 80,
-                        used: 0,
-                        remaining: 80
-                    }
-                ]
-            },
-            {
-                id: 'LOT005',
-                importDate: '2024-08-25',
-                supplier: 'Mikado',
-                status: 'active',
-                products: [
-                    {
-                        productCode: 'G004',
-                        productName: 'Gạch lát nền 80x80 Mikado',
-                        quantity: 100,
-                        used: 0,
-                        remaining: 100
-                    },
-                    {
-                        productCode: 'G006',
-                        productName: 'Gạch terrazzo 40x40',
-                        quantity: 200,
-                        used: 0,
-                        remaining: 200
-                    }
-                ]
-            }
-        ];
-        currentBatchId = 6;
-        saveBatchesToStorage();
-        saveCurrentBatchIdToStorage();
-    }
-}
-
-// Setup event listeners
-function setupEventListeners() {
-    // Navigation
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const page = this.getAttribute('data-page');
-            showPage(page);
-        });
-    });
-    
-    // Search functionality
-    document.getElementById('search-inventory').addEventListener('input', function() {
-        filterInventory(this.value);
-    });
-    
-    // Column filters
-    setupColumnFilters();
-    
-    // Export buttons
-    document.getElementById('export-inventory-btn').addEventListener('click', exportInventoryData);
-    document.getElementById('export-orders-btn').addEventListener('click', exportOrdersData);
-    document.getElementById('export-batches-btn').addEventListener('click', exportBatchesData);
-    document.getElementById('export-summary-btn').addEventListener('click', exportSummaryData);
-    
-    // Import form
-    document.getElementById('import-form').addEventListener('submit', handleImportProduct);
-    
-    // Batch form
-    document.getElementById('batch-form').addEventListener('submit', handleCreateBatch);
-    document.getElementById('new-batch-btn').addEventListener('click', showBatchForm);
-    document.getElementById('cancel-batch-btn').addEventListener('click', hideBatchForm);
-    
-    // Order form
-    document.getElementById('order-form').addEventListener('submit', handleCreateOrder);
-    document.getElementById('new-order-btn').addEventListener('click', showOrderForm);
-    document.getElementById('cancel-order-btn').addEventListener('click', hideOrderForm);
-    document.getElementById('add-item-btn').addEventListener('click', addOrderItem);
-    
-    // Modal
-    document.getElementById('order-detail-modal').addEventListener('click', function(e) {
-        if (e.target === this || e.target.classList.contains('close') || e.target.classList.contains('close-modal')) {
-            hideModal();
-        }
-    });
-    
-    document.getElementById('export-order-full-btn').addEventListener('click', () => handleExportOrder(true));
-    document.getElementById('export-order-simple-btn').addEventListener('click', () => handleExportOrder(false));
-    
-    // Product batch modal
-    document.getElementById('product-batch-modal').addEventListener('click', function(e) {
-        if (e.target === this || e.target.classList.contains('close') || e.target.classList.contains('close-modal')) {
-            hideProductBatchModal();
-        }
-    });
-    
-    // Batch detail modal
-    document.getElementById('batch-detail-modal').addEventListener('click', function(e) {
-        if (e.target === this || e.target.classList.contains('close') || e.target.classList.contains('close-modal')) {
-            hideBatchDetailModal();
-        }
-    });
-    
-    // Edit batch modal
-    document.getElementById('edit-batch-modal').addEventListener('click', function(e) {
-        if (e.target === this || e.target.classList.contains('close') || e.target.classList.contains('close-modal')) {
-            hideEditBatchModal();
-        }
-    });
-    
-    // Save batch button
-    document.getElementById('save-batch-btn').addEventListener('click', saveBatchChanges);
-}
-
-// Page navigation
-function showPage(pageId) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-    
-    // Remove active class from all nav buttons
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // Show selected page
-    document.getElementById(pageId + '-page').classList.add('active');
-    
-    // Add active class to selected nav button
-    document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
-    
-    // Update displays based on page
-    if (pageId === 'inventory') {
-        updateInventoryDisplay();
-    } else if (pageId === 'orders') {
-        updateOrdersDisplay();
-        updateProductSelects();
-    } else if (pageId === 'batches') {
-        updateBatchesDisplay();
-        updateBatchProductSelects();
-    } else if (pageId === 'reports') {
-        updateReportsDisplay();
-    }
-}
-
-// Inventory functions
-function updateInventoryDisplay() {
-    const tbody = document.getElementById('inventory-tbody');
-    tbody.innerHTML = '';
-    
-    inventory.forEach(product => {
-        const row = createInventoryRow(product);
-        tbody.appendChild(row);
-    });
-}
-
-function createInventoryRow(product) {
-    const row = document.createElement('tr');
-    
-    const statusClass = getStockStatus(product.stock);
-    const statusText = getStockStatusText(product.stock);
-    
-        row.innerHTML = `
-        <td><strong>${product.code}</strong></td>
-        <td>${product.name}</td>
-        <td>${product.category}</td>
-        <td>${product.size || 'N/A'}</td>
-        <td>${product.color || 'N/A'}</td>
-        <td>${product.unit}</td>
-        <td>${formatCurrency(product.importPrice)}</td>
-        <td>${formatCurrency(product.referencePrice || product.sellPrice)}</td>
-        <td><strong>${product.stock}</strong></td>
-        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-        <td>
-            <button class="btn btn-info btn-small" onclick="showProductBatchDetails('${product.code}')">
-                <i class="fas fa-eye"></i> Xem
-            </button>
-        </td>
-    `;
-    
-    return row;
-}
-
-function getStockStatus(stock) {
-    if (stock === 0) return 'status-out-of-stock';
-    if (stock <= 10) return 'status-low-stock';
-    return 'status-in-stock';
-}
-
-function getStockStatusText(stock) {
-    if (stock === 0) return 'Hết hàng';
-    if (stock <= 10) return 'Sắp hết';
-    return 'Còn hàng';
-}
-
-function filterInventory(searchTerm) {
-    const tbody = document.getElementById('inventory-tbody');
-    const rows = tbody.querySelectorAll('tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        const isVisible = text.includes(searchTerm.toLowerCase());
-        row.style.display = isVisible ? '' : 'none';
-    });
-}
-
-// Setup column filters
-function setupColumnFilters() {
-    // Inventory table filters
-    const inventoryFilters = document.querySelectorAll('#inventory-table .filter-input, #inventory-table .filter-select');
-    inventoryFilters.forEach(filter => {
-        filter.addEventListener('input', function() {
-            filterTable('inventory-table');
-        });
-        filter.addEventListener('change', function() {
-            filterTable('inventory-table');
-        });
-    });
-    
-    // Orders table filters
-    const orderFilters = document.querySelectorAll('#orders-table .filter-input, #orders-table .filter-select');
-    orderFilters.forEach(filter => {
-        filter.addEventListener('input', function() {
-            filterTable('orders-table');
-        });
-        filter.addEventListener('change', function() {
-            filterTable('orders-table');
-        });
-    });
-}
-
-function filterTable(tableId) {
-    const table = document.getElementById(tableId);
-    const tbody = table.querySelector('tbody');
-    const rows = tbody.querySelectorAll('tr');
-    const filters = table.querySelectorAll('.filter-input, .filter-select');
-    
-    rows.forEach(row => {
-        let isVisible = true;
-        const cells = row.querySelectorAll('td');
-        
-        filters.forEach(filter => {
-            const columnIndex = parseInt(filter.dataset.column);
-            const filterValue = filter.value.toLowerCase().trim();
-            
-            if (filterValue && cells[columnIndex]) {
-                const cellText = cells[columnIndex].textContent.toLowerCase().trim();
-                
-                if (filter.type === 'number') {
-                    const cellNumber = parseFloat(cellText.replace(/[^\d.-]/g, ''));
-                    const filterNumber = parseFloat(filterValue);
-                    if (!isNaN(filterNumber) && !isNaN(cellNumber)) {
-                        if (cellNumber < filterNumber) {
-                            isVisible = false;
-                        }
-                    }
-                } else if (filter.type === 'date') {
-                    const cellDate = new Date(cells[columnIndex].textContent);
-                    const filterDate = new Date(filterValue);
-                    if (!isNaN(filterDate.getTime()) && !isNaN(cellDate.getTime())) {
-                        if (cellDate.toDateString() !== filterDate.toDateString()) {
-                            isVisible = false;
-                        }
-                    }
-                } else {
-                    if (!cellText.includes(filterValue)) {
-                        isVisible = false;
-                    }
-                }
-            }
-        });
-        
-        row.style.display = isVisible ? '' : 'none';
-    });
-}
-
-// Import product functions
-function handleImportProduct(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const productData = {
-        code: document.getElementById('product-code').value,
-        name: document.getElementById('product-name').value,
-        category: document.getElementById('product-category').value,
-        unit: document.getElementById('product-unit').value,
-        size: document.getElementById('product-size').value,
-        color: document.getElementById('product-color').value,
-        importPrice: parseInt(document.getElementById('import-price').value),
-        referencePrice: parseInt(document.getElementById('sell-price').value),
-        stock: parseInt(document.getElementById('import-quantity').value),
-        supplier: document.getElementById('supplier').value
-    };
-    
-    // Create new batch for this import
-    const batchId = generateBatchId();
-    const newBatch = {
-        id: batchId,
-        importDate: new Date().toISOString().split('T')[0],
-        supplier: productData.supplier,
-        status: 'active',
-        products: [{
-            productCode: productData.code,
-            productName: productData.name,
-            quantity: productData.stock,
-            used: 0,
-            remaining: productData.stock
-        }]
-    };
-    
-    // Check if product already exists
-    const existingProductIndex = inventory.findIndex(p => p.code === productData.code);
-    
-    if (existingProductIndex !== -1) {
-        // Update existing product stock
-        inventory[existingProductIndex].stock += productData.stock;
-        
-        // Add to existing batch or create new one
-        const existingBatch = batches.find(b => b.supplier === productData.supplier && b.importDate === newBatch.importDate);
-        if (existingBatch) {
-            // Add to existing batch
-            existingBatch.products.push(newBatch.products[0]);
-        } else {
-            // Create new batch
-            batches.push(newBatch);
-            currentBatchId++;
-        }
-        
-        showToast('Đã cập nhật sản phẩm và tạo lô hàng!', 'success');
-    } else {
-        // Add new product
-        inventory.push(productData);
-        batches.push(newBatch);
-        currentBatchId++;
-        showToast('Đã thêm sản phẩm mới và tạo lô hàng!', 'success');
-    }
-    
-    saveInventoryToStorage();
-    saveBatchesToStorage();
-    saveCurrentBatchIdToStorage();
-    updateInventoryDisplay();
-    updateBatchesDisplay();
-    e.target.reset();
-}
-
-// Order functions
-function showOrderForm() {
-    document.getElementById('order-form-container').style.display = 'block';
-    document.getElementById('order-id').value = generateOrderId();
-    updateProductSelects();
-}
-
-function hideOrderForm() {
-    document.getElementById('order-form-container').style.display = 'none';
-    document.getElementById('order-form').reset();
-    
-    // Reset to single order item
-    const orderItems = document.querySelector('.order-items');
-    orderItems.innerHTML = createOrderItemHTML();
-    updateProductSelects();
-    updateGrandTotal();
-}
-
-function generateOrderId() {
-    return `DH${String(currentOrderId).padStart(4, '0')}`;
-}
-
-function addOrderItem() {
-    const orderItems = document.querySelector('.order-items');
-    const newItem = document.createElement('div');
-    newItem.className = 'order-item';
-    newItem.innerHTML = createOrderItemHTML();
-    orderItems.appendChild(newItem);
-    
-    updateProductSelects();
-    setupOrderItemListeners(newItem);
-}
-
-function createOrderItemHTML() {
-    return `
-        <div class="form-row">
-            <div class="form-group">
-                <label>Mã Sản Phẩm:</label>
-                <select class="product-select" required>
-                    <option value="">Chọn sản phẩm</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Số Lượng:</label>
-                <input type="number" class="quantity-input" min="1" required>
-            </div>
-            <div class="form-group">
-                <label>Đơn Giá:</label>
-                <input type="number" class="price-input" readonly>
-            </div>
-            <div class="form-group">
-                <label>Thành Tiền:</label>
-                <input type="number" class="total-input" readonly>
-            </div>
-            <button type="button" class="btn btn-danger btn-small remove-item">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-    `;
-}
-
-function updateProductSelects() {
-    const selects = document.querySelectorAll('.product-select');
-    
-    selects.forEach(select => {
-        const currentValue = select.value;
-        select.innerHTML = '<option value="">Chọn sản phẩm</option>';
-        
-        inventory.forEach(product => {
-            if (product.stock > 0) {
-                const option = document.createElement('option');
-                option.value = product.code;
-                option.textContent = `${product.code} - ${product.name} (Còn: ${product.stock})`;
-                option.dataset.price = product.referencePrice || product.sellPrice;
-                option.dataset.stock = product.stock;
-                select.appendChild(option);
-            }
-        });
-        
-        select.value = currentValue;
-        setupOrderItemListeners(select.closest('.order-item'));
-    });
-}
-
-function setupOrderItemListeners(orderItem) {
-    if (!orderItem) return;
-    
-    const productSelect = orderItem.querySelector('.product-select');
-    const quantityInput = orderItem.querySelector('.quantity-input');
-    const priceInput = orderItem.querySelector('.price-input');
-    const totalInput = orderItem.querySelector('.total-input');
-    const removeBtn = orderItem.querySelector('.remove-item');
-    
-    if (!productSelect || !quantityInput || !priceInput || !totalInput || !removeBtn) {
-        return;
-    }
-    
-    productSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-            // Chỉ set placeholder cho giá tham chiếu, không tự động điền
-            priceInput.placeholder = `Giá tham chiếu: ${formatCurrency(selectedOption.dataset.price)}`;
-            quantityInput.max = selectedOption.dataset.stock;
-            quantityInput.value = 1;
-            // Clear previous values
-            priceInput.value = '';
-            totalInput.value = '';
-        } else {
-            priceInput.placeholder = 'Nhập giá bán...';
-            priceInput.value = '';
-            totalInput.value = '';
-            quantityInput.max = '';
-        }
-    });
-    
-    quantityInput.addEventListener('input', function() {
-        updateItemTotal(orderItem);
-    });
-    
-    priceInput.addEventListener('input', function() {
-        updateItemTotal(orderItem);
-    });
-    
-    removeBtn.addEventListener('click', function() {
-        if (document.querySelectorAll('.order-item').length > 1) {
-            orderItem.remove();
-            updateGrandTotal();
-        } else {
-            showToast('Phải có ít nhất một sản phẩm trong đơn hàng!', 'warning');
-        }
-    });
-}
-
-function updateItemTotal(orderItem) {
-    const quantity = parseInt(orderItem.querySelector('.quantity-input').value) || 0;
-    const price = parseInt(orderItem.querySelector('.price-input').value) || 0;
-    const total = quantity * price;
-    
-    orderItem.querySelector('.total-input').value = total;
-    updateGrandTotal();
-}
-
-function updateGrandTotal() {
-    const totalInputs = document.querySelectorAll('.total-input');
-    let grandTotal = 0;
-    
-    totalInputs.forEach(input => {
-        grandTotal += parseInt(input.value) || 0;
-    });
-    
-    document.getElementById('grand-total').textContent = formatCurrency(grandTotal);
-}
-
-function handleCreateOrder(e) {
-    e.preventDefault();
-    
-    const orderData = {
-        id: document.getElementById('order-id').value,
-        customerName: document.getElementById('customer-name').value,
-        customerPhone: document.getElementById('customer-phone').value,
-        customerAddress: document.getElementById('customer-address').value,
-        date: new Date().toISOString(),
-        status: 'pending',
-        items: [],
-        total: 0
-    };
-    
-    // Collect order items
-    const orderItems = document.querySelectorAll('.order-item');
-    let isValid = true;
-    
-    orderItems.forEach(item => {
-        const productCode = item.querySelector('.product-select').value;
-        const quantity = parseInt(item.querySelector('.quantity-input').value);
-        const price = parseInt(item.querySelector('.price-input').value);
-        const total = parseInt(item.querySelector('.total-input').value);
-        
-        if (productCode && quantity && price) {
-            const product = inventory.find(p => p.code === productCode);
-            if (product && quantity <= product.stock) {
-                orderData.items.push({
-                    productCode,
-                    productName: product.name,
-                    quantity,
-                    price,
-                    total
-                });
-                orderData.total += total;
-            } else {
-                showToast(`Không đủ hàng cho sản phẩm ${productCode}!`, 'error');
-                isValid = false;
-            }
-        }
-    });
-    
-    if (isValid && orderData.items.length > 0) {
-        orders.push(orderData);
-        currentOrderId++;
-        
-        saveOrdersToStorage();
-        saveCurrentOrderIdToStorage();
-        
-        showToast('Đã tạo đơn hàng thành công!', 'success');
-        hideOrderForm();
-        updateOrdersDisplay();
-    }
-}
-
-function updateOrdersDisplay() {
-    const tbody = document.getElementById('orders-tbody');
-    tbody.innerHTML = '';
-    
-    orders.forEach(order => {
-        const row = createOrderRow(order);
-        tbody.appendChild(row);
-    });
-}
-
-function createOrderRow(order) {
-    const row = document.createElement('tr');
-    
-    const statusClass = `status-${order.status}`;
-    const statusText = getOrderStatusText(order.status);
-    const date = new Date(order.date).toLocaleDateString('vi-VN');
-    
-    row.innerHTML = `
-        <td><strong>${order.id}</strong></td>
-        <td>${order.customerName}</td>
-        <td>${date}</td>
-        <td>${formatCurrency(order.total)}</td>
-        <td>
-            <select class="status-select" onchange="changeOrderStatus('${order.id}', this.value)" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #ddd; min-width: 120px;">
-                <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Chờ xử lý</option>
-                <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Đã hoàn thành</option>
-                <option value="exported" ${order.status === 'exported' ? 'selected' : ''}>Đã xuất phiếu</option>
-                <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Đã hủy</option>
-            </select>
-        </td>
-        <td>
-            <button class="btn btn-primary btn-small" onclick="showOrderDetail('${order.id}')">
-                <i class="fas fa-eye"></i> Xem
-            </button>
-        </td>
-    `;
-    
-    return row;
-}
-
-function getOrderStatusText(status) {
-    const statusMap = {
-        'pending': 'Chờ xử lý',
-        'completed': 'Đã hoàn thành',
-        'exported': 'Đã xuất phiếu',
-        'cancelled': 'Đã hủy'
-    };
-    return statusMap[status] || status;
-}
-
-function changeOrderStatus(orderId, newStatus) {
-    const order = orders.find(o => o.id === orderId);
-    if (!order) return;
-    
-    const oldStatus = order.status;
-    order.status = newStatus;
-    
-    // Save changes
-    saveOrdersToStorage();
-    updateOrdersDisplay();
-    
-    // Show notification
-    const statusText = getOrderStatusText(newStatus);
-    showToast(`Đã thay đổi trạng thái đơn hàng ${orderId} thành "${statusText}"`, 'success');
-}
-
-function showOrderDetail(orderId) {
-    const order = orders.find(o => o.id === orderId);
-    if (!order) return;
-    
-    const modal = document.getElementById('order-detail-modal');
-    const content = document.getElementById('order-detail-content');
-    
-    content.innerHTML = createOrderDetailHTML(order);
-    modal.style.display = 'block';
-    
-    // Store current order for export
-    modal.dataset.orderId = orderId;
-}
-
-function createOrderDetailHTML(order) {
-    const date = new Date(order.date).toLocaleDateString('vi-VN');
-    
-    return `
-        <div class="order-detail">
-            <h4>Thông Tin Đơn Hàng</h4>
-            <div class="order-info">
-                <div class="info-item">
-                    <label>Mã Đơn Hàng:</label>
-                    <span>${order.id}</span>
-                </div>
-                <div class="info-item">
-                    <label>Ngày Tạo:</label>
-                    <span>${date}</span>
-                </div>
-                <div class="info-item">
-                    <label>Khách Hàng:</label>
-                    <span>${order.customerName}</span>
-                </div>
-                <div class="info-item">
-                    <label>Số Điện Thoại:</label>
-                    <span>${order.customerPhone}</span>
-                </div>
-                <div class="info-item">
-                    <label>Địa Chỉ:</label>
-                    <span>${order.customerAddress}</span>
-                </div>
-                <div class="info-item">
-                    <label>Trạng Thái:</label>
-                    <span class="status-badge status-${order.status}">${getOrderStatusText(order.status)}</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="order-items-detail">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mã SP</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Số Lượng</th>
-                        <th>Đơn Giá</th>
-                        <th>Thành Tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${order.items.map(item => `
-                        <tr>
-                            <td>${item.productCode}</td>
-                            <td>${item.productName}</td>
-                            <td>${item.quantity}</td>
-                            <td>${formatCurrency(item.price)}</td>
-                            <td>${formatCurrency(item.total)}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-            <div class="order-total">
-                Tổng Tiền: ${formatCurrency(order.total)}
-            </div>
-        </div>
-    `;
-}
-
-function hideModal() {
-    document.getElementById('order-detail-modal').style.display = 'none';
-}
-
-function handleExportOrder() {
-    const modal = document.getElementById('order-detail-modal');
-    const orderId = modal.dataset.orderId;
-    const order = orders.find(o => o.id === orderId);
-    
-    if (!order || order.status !== 'pending') {
-        showToast('Không thể xuất đơn hàng này!', 'error');
-        return;
-    }
-    
-    // Update inventory
-    let canExport = true;
-    const updates = [];
-    
-    order.items.forEach(item => {
-        const product = inventory.find(p => p.code === item.productCode);
-        if (product && product.stock >= item.quantity) {
-            updates.push({
-                product: product,
-                quantity: item.quantity
-            });
-        } else {
-            canExport = false;
-            showToast(`Không đủ hàng cho sản phẩm ${item.productCode}!`, 'error');
-        }
-    });
-    
-    if (canExport) {
-        // Apply inventory updates
-        updates.forEach(update => {
-            update.product.stock -= update.quantity;
-        });
-        
-        // Update order status
-        order.status = 'completed';
-        
-        // Save changes
-        saveInventoryToStorage();
-        saveOrdersToStorage();
-        
-        // Generate and print receipt
-        generateReceipt(order);
-        
-        // Update displays
-        updateInventoryDisplay();
-        updateOrdersDisplay();
-        
-        showToast('Đã xuất đơn hàng và cập nhật kho thành công!', 'success');
-        hideModal();
-    }
-}
-
-function generateReceipt(order) {
-    const receiptWindow = window.open('', '_blank');
-    const date = new Date(order.date).toLocaleDateString('vi-VN');
-    
-    const receiptHTML = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Phiếu Đơn Hàng - ${order.id}</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                .header { text-align: center; margin-bottom: 30px; }
-                .company-name { font-size: 24px; font-weight: bold; color: #2c3e50; }
-                .receipt-title { font-size: 20px; margin: 10px 0; }
-                .order-info { margin: 20px 0; }
-                .order-info div { margin: 5px 0; }
-                table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-                th { background-color: #f2f2f2; }
-                .total { text-align: right; font-size: 18px; font-weight: bold; margin: 20px 0; }
-                .footer { margin-top: 40px; text-align: center; }
-                @media print {
-                    body { margin: 0; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <div class="company-name">HỆ THỐNG QUẢN LÝ XUẤT NHẬP KHO</div>
-                <div class="receipt-title">PHIẾU ĐỚN HÀNG</div>
-                <div>Mã đơn: ${order.id}</div>
-            </div>
-            
-            <div class="order-info">
-                <div><strong>Ngày tạo:</strong> ${date}</div>
-                <div><strong>Khách hàng:</strong> ${order.customerName}</div>
-                <div><strong>Số điện thoại:</strong> ${order.customerPhone}</div>
-                <div><strong>Địa chỉ:</strong> ${order.customerAddress}</div>
-            </div>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Mã SP</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Số Lượng</th>
-                        <th>Đơn Giá</th>
-                        <th>Thành Tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${order.items.map((item, index) => `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${item.productCode}</td>
-                            <td>${item.productName}</td>
-                            <td>${item.quantity}</td>
-                            <td>${formatCurrency(item.price)}</td>
-                            <td>${formatCurrency(item.total)}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-            
-            <div class="total">
-                <strong>TỔNG TIỀN: ${formatCurrency(order.total)}</strong>
-            </div>
-            
-            <div class="footer">
-                <p>Cảm ơn quý khách đã sử dụng dịch vụ!</p>
-                <p>Ngày in: ${new Date().toLocaleDateString('vi-VN')}</p>
-            </div>
-        </body>
-        </html>
-    `;
-    
-    receiptWindow.document.write(receiptHTML);
-    receiptWindow.document.close();
-    receiptWindow.print();
-}
-
-function cancelOrder(orderId) {
-    if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-        const order = orders.find(o => o.id === orderId);
-        if (order) {
-            order.status = 'cancelled';
-            saveOrdersToStorage();
-            updateOrdersDisplay();
-            showToast('Đã hủy đơn hàng!', 'success');
-        }
-    }
-}
+let currentBatchId = 4;
 
 // Utility functions
 function formatCurrency(amount) {
@@ -1176,197 +183,579 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icon = getToastIcon(type);
-    toast.innerHTML = `
-        <i class="${icon}"></i>
-        <span>${message}</span>
-    `;
-    
-    container.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.remove();
-    }, 5000);
+function formatNumber(number) {
+    return new Intl.NumberFormat('vi-VN').format(number);
 }
 
-function getToastIcon(type) {
-    const icons = {
-        'success': 'fas fa-check-circle',
-        'error': 'fas fa-exclamation-circle',
-        'warning': 'fas fa-exclamation-triangle',
-        'info': 'fas fa-info-circle'
-    };
-    return icons[type] || icons.info;
+function getStatusClass(status) {
+    switch (status) {
+        case 'Còn hàng':
+        case 'Hoàn thành':
+            return 'status-in-stock';
+        case 'Sắp hết':
+        case 'Đang xử lý':
+            return 'status-low-stock';
+        case 'Hết hàng':
+        case 'Hủy':
+            return 'status-out-of-stock';
+        case 'Đã xuất phiếu':
+            return 'status-exported';
+        default:
+            return 'status-pending';
+    }
 }
 
-// Storage functions
-function saveInventoryToStorage() {
-    localStorage.setItem('warehouse_inventory', JSON.stringify(inventory));
-}
-
-function saveOrdersToStorage() {
-    localStorage.setItem('warehouse_orders', JSON.stringify(orders));
-}
-
-function saveCurrentOrderIdToStorage() {
-    localStorage.setItem('current_order_id', currentOrderId.toString());
-}
-
-function saveBatchesToStorage() {
-    localStorage.setItem('warehouse_batches', JSON.stringify(batches));
-}
-
-function saveCurrentBatchIdToStorage() {
-    localStorage.setItem('current_batch_id', currentBatchId.toString());
-}
-
-// Initialize order item listeners on page load
+// Initialize application
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        const orderItems = document.querySelectorAll('.order-item');
-        orderItems.forEach(item => {
-            if (item) {
-                setupOrderItemListeners(item);
-            }
-        });
-    }, 100);
+    loadData();
+    setupEventListeners();
+    updateInventoryDisplay();
+    updateOrdersDisplay();
+    updateBatchesDisplay();
+    updateReportsDisplay();
+    setupColumnFilters();
+    
+    // Expose functions for inline/use in dynamic handlers
+    window.viewProductBatches = viewProductBatches;
+    window.viewOrderDetail = viewOrderDetail;
+    window.addOrderItem = addOrderItem;
+    window.addImportItem = addImportItem;
+    window.editBatch = editBatch;
+    window.removeProductFromBatch = removeProductFromBatch;
 });
 
-// Batch management functions
-function showBatchForm() {
-    document.getElementById('batch-form-container').style.display = 'block';
-    document.getElementById('batch-code').value = generateBatchId();
-    updateBatchProductSelects();
-}
-
-function hideBatchForm() {
-    document.getElementById('batch-form-container').style.display = 'none';
-    document.getElementById('batch-form').reset();
-}
-
-function generateBatchId() {
-    return `LOT${String(currentBatchId).padStart(3, '0')}`;
-}
-
-function updateBatchProductSelects() {
-    const select = document.getElementById('batch-product');
-    select.innerHTML = '<option value="">Chọn sản phẩm</option>';
+// Load data from localStorage
+function loadData() {
+    const savedInventory = localStorage.getItem('warehouse_inventory');
+    const savedOrders = localStorage.getItem('warehouse_orders');
+    const savedBatches = localStorage.getItem('warehouse_batches');
+    const savedOrderId = localStorage.getItem('warehouse_current_order_id');
+    const savedBatchId = localStorage.getItem('warehouse_current_batch_id');
     
-    inventory.forEach(product => {
-        const option = document.createElement('option');
-        option.value = product.code;
-        option.textContent = `${product.code} - ${product.name}`;
-        option.dataset.name = product.name;
-        select.appendChild(option);
+    if (savedInventory) {
+        inventory = JSON.parse(savedInventory);
+    }
+    if (savedOrders) {
+        orders = JSON.parse(savedOrders);
+    }
+    if (savedBatches) {
+        batches = JSON.parse(savedBatches);
+    }
+    if (savedOrderId) {
+        currentOrderId = parseInt(savedOrderId);
+    }
+    if (savedBatchId) {
+        currentBatchId = parseInt(savedBatchId);
+    }
+}
+
+// Save data to localStorage
+function saveData() {
+    localStorage.setItem('warehouse_inventory', JSON.stringify(inventory));
+    localStorage.setItem('warehouse_orders', JSON.stringify(orders));
+    localStorage.setItem('warehouse_batches', JSON.stringify(batches));
+    localStorage.setItem('warehouse_current_order_id', currentOrderId.toString());
+    localStorage.setItem('warehouse_current_batch_id', currentBatchId.toString());
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Navigation
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const pageId = this.getAttribute('data-page');
+            showPage(pageId);
+        });
+    });
+    
+    // Search functionality
+    document.getElementById('search-inventory').addEventListener('input', function() {
+        filterInventory();
+    });
+    
+    document.getElementById('search-orders').addEventListener('input', function() {
+        filterTable('orders-table');
+    });
+    
+    document.getElementById('search-reports').addEventListener('input', function() {
+        filterTable('inventory-summary-table');
+        filterTable('inventory-detail-table');
+    });
+    
+    // Column filters
+    setupColumnFilters();
+    
+    // Add product row buttons
+    const addOrderBtn = document.getElementById('add-item-btn');
+    if (addOrderBtn) addOrderBtn.addEventListener('click', addOrderItem);
+    const addImportBtn = document.getElementById('add-import-item-btn');
+    if (addImportBtn) addImportBtn.addEventListener('click', addImportItem);
+
+    // Submit handlers
+    const orderForm = document.getElementById('order-form');
+    if (orderForm) orderForm.addEventListener('submit', handleCreateOrder);
+    const importForm = document.getElementById('import-form');
+    if (importForm) importForm.addEventListener('submit', handleImportProducts);
+    
+    // Export buttons
+    document.getElementById('export-inventory-btn').addEventListener('click', function() {
+        exportToCSV('inventory-table', 'danh_sach_kho_hang.csv');
+    });
+    
+    document.getElementById('export-orders-btn').addEventListener('click', function() {
+        exportToCSV('orders-table', 'danh_sach_don_hang.csv');
+    });
+    
+    document.getElementById('export-batches-btn').addEventListener('click', function() {
+        exportToCSV('batches-table', 'danh_sach_lo_hang.csv');
+    });
+    
+    document.getElementById('export-summary-btn').addEventListener('click', function() {
+        exportToCSV('inventory-summary-table', 'bao_cao_ton_kho_tong_quat.csv');
+    });
+    
+    // Modal close buttons
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+    });
+
+    // Save batch button in edit modal
+    const saveBatchBtn = document.getElementById('save-batch-btn');
+    if (saveBatchBtn) {
+        saveBatchBtn.addEventListener('click', saveBatchChanges);
+    }
+    
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
     });
 }
 
-function handleCreateBatch(e) {
-    e.preventDefault();
+// Page navigation
+function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
     
-    const productCode = document.getElementById('batch-product').value;
-    const product = inventory.find(p => p.code === productCode);
+    // Show selected page
+    document.getElementById(pageId + '-page').classList.add('active');
     
-    const batchData = {
-        id: document.getElementById('batch-code').value,
-        productCode: productCode,
-        productName: product ? product.name : '',
-        quantity: parseInt(document.getElementById('batch-quantity').value),
-        used: 0,
-        remaining: parseInt(document.getElementById('batch-quantity').value),
-        importDate: document.getElementById('batch-import-date').value,
-        supplier: document.getElementById('batch-supplier').value,
-        status: 'active'
-    };
+    // Update navigation buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
     
-    batches.push(batchData);
-    currentBatchId++;
-    
-    saveBatchesToStorage();
-    saveCurrentBatchIdToStorage();
-    
-    showToast('Đã tạo lô hàng thành công!', 'success');
-    hideBatchForm();
-    updateBatchesDisplay();
-    updateInventoryFromBatches();
+    // Update displays based on page
+    switch(pageId) {
+        case 'inventory':
+            updateInventoryDisplay();
+            break;
+        case 'orders':
+            updateOrdersDisplay();
+            break;
+        case 'batches':
+            updateBatchesDisplay();
+            break;
+        case 'reports':
+            updateReportsDisplay();
+            break;
+    }
 }
 
+// Pagination variables
+let currentPage = {
+    inventory: 1,
+    orders: 1,
+    batches: 1,
+    reports: 1
+};
+
+let pageSize = {
+    inventory: 25,
+    orders: 25,
+    batches: 25,
+    reports: 25
+};
+
+let filteredData = {
+    inventory: [],
+    orders: [],
+    batches: [],
+    reports: []
+};
+
+// Inventory functions
+function updateInventoryDisplay() {
+    const tbody = document.getElementById('inventory-tbody');
+    tbody.innerHTML = '';
+    
+    // Apply filters first
+    filteredData.inventory = inventory.filter(item => {
+        const searchTerm = document.getElementById('search-inventory').value.toLowerCase();
+        if (searchTerm) {
+            const searchText = `${item.code} ${item.name} ${item.category} ${item.size} ${item.color}`.toLowerCase();
+            if (!searchText.includes(searchTerm)) return false;
+        }
+        return true;
+    });
+    
+    // Calculate pagination
+    const totalRecords = filteredData.inventory.length;
+    const totalPages = Math.ceil(totalRecords / pageSize.inventory);
+    const startIndex = (currentPage.inventory - 1) * pageSize.inventory;
+    const endIndex = Math.min(startIndex + pageSize.inventory, totalRecords);
+    
+    // Update pagination info
+    document.getElementById('inventory-total-records').textContent = totalRecords;
+    
+    // Display current page data
+    const currentData = filteredData.inventory.slice(startIndex, endIndex);
+    currentData.forEach(item => {
+        const status = getStockStatus(item.stock);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td>${item.size}</td>
+            <td>${item.color}</td>
+            <td>${item.unit}</td>
+            <td>${formatCurrency(item.importPrice)}</td>
+            <td>${formatCurrency(item.referencePrice)}</td>
+            <td>${formatNumber(item.stock)}</td>
+            <td><span class="status-badge ${getStatusClass(status)}">${status}</span></td>
+            <td>
+                <button type="button" class="btn btn-small btn-info btn-view-product-batches" data-id="${item.id}">
+                    <i class="fas fa-eye"></i> Chi tiết
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    // Update pagination controls
+    updatePagination('inventory', totalPages);
+
+    // Bind detail buttons after render
+    document.querySelectorAll('.btn-view-product-batches').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            viewProductBatches(id);
+        });
+    });
+}
+
+function getStockStatus(stock) {
+    if (stock === 0) return 'Hết hàng';
+    if (stock < 50) return 'Sắp hết';
+    return 'Còn hàng';
+}
+
+// Orders functions
+function updateOrdersDisplay() {
+    const tbody = document.getElementById('orders-tbody');
+    tbody.innerHTML = '';
+    
+    // Apply filters first
+    filteredData.orders = orders.filter(order => {
+        const searchTerm = document.getElementById('search-orders').value.toLowerCase();
+        if (searchTerm) {
+            const searchText = `${order.id} ${order.customerName} ${order.date}`.toLowerCase();
+            if (!searchText.includes(searchTerm)) return false;
+        }
+        return true;
+    });
+    
+    // Calculate pagination
+    const totalRecords = filteredData.orders.length;
+    const totalPages = Math.ceil(totalRecords / pageSize.orders);
+    const startIndex = (currentPage.orders - 1) * pageSize.orders;
+    const endIndex = Math.min(startIndex + pageSize.orders, totalRecords);
+    
+    // Update pagination info
+    document.getElementById('orders-total-records').textContent = totalRecords;
+    
+    // Display current page data
+    const currentData = filteredData.orders.slice(startIndex, endIndex);
+    currentData.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.customerName}</td>
+            <td>${order.date}</td>
+            <td>${formatCurrency(order.total)}</td>
+            <td>
+                <select class="status-select" data-order-id="${order.id}">
+                    <option value="Đang xử lý" ${order.status === 'Đang xử lý' ? 'selected' : ''}>Đang xử lý</option>
+                    <option value="Hoàn thành" ${order.status === 'Hoàn thành' ? 'selected' : ''}>Hoàn thành</option>
+                    <option value="Hủy" ${order.status === 'Hủy' ? 'selected' : ''}>Hủy</option>
+                    <option value="Đã xuất phiếu" ${order.status === 'Đã xuất phiếu' ? 'selected' : ''}>Đã xuất phiếu</option>
+                </select>
+            </td>
+            <td>
+                <button type="button" class="btn btn-small btn-primary btn-view-order" data-id="${order.id}">
+                    <i class="fas fa-eye"></i> Xem
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    // Add event listeners for status changes
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function() {
+            const orderId = this.getAttribute('data-order-id');
+            const newStatus = this.value;
+            updateOrderStatus(orderId, newStatus);
+        });
+    });
+    
+    // Update pagination controls
+    updatePagination('orders', totalPages);
+
+    // Bind view buttons after render
+    document.querySelectorAll('.btn-view-order').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            viewOrderDetail(id);
+        });
+    });
+}
+
+function updateOrderStatus(orderId, newStatus) {
+    const order = orders.find(o => o.id === orderId);
+    if (order) {
+        order.status = newStatus;
+        saveData();
+        updateOrdersDisplay();
+        showToast(`Đã cập nhật trạng thái đơn hàng ${orderId} thành ${newStatus}`, 'success');
+    }
+}
+
+function viewOrderDetail(orderId) {
+    const order = orders.find(o => o.id === orderId);
+    if (!order) return;
+    
+    const modal = document.getElementById('order-detail-modal');
+    const content = document.getElementById('order-detail-content');
+    
+    let productsHtml = '';
+    order.products.forEach(product => {
+        productsHtml += `
+            <tr>
+                <td>${product.code}</td>
+                <td>${product.name}</td>
+                <td>${product.quantity}</td>
+                <td>${formatCurrency(product.price)}</td>
+                <td>${formatCurrency(product.quantity * product.price)}</td>
+            </tr>
+        `;
+    });
+    
+    content.innerHTML = `
+        <div class="order-detail">
+            <h4>Thông tin đơn hàng #${order.id}</h4>
+            <p><strong>Khách hàng:</strong> ${order.customerName}</p>
+            <p><strong>Số điện thoại:</strong> ${order.customerPhone}</p>
+            <p><strong>Địa chỉ:</strong> ${order.customerAddress}</p>
+            <p><strong>Ngày tạo:</strong> ${order.date}</p>
+            <p><strong>Trạng thái:</strong> <span class="status-badge ${getStatusClass(order.status)}">${order.status}</span></p>
+            
+            <h5>Danh sách sản phẩm:</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã SP</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productsHtml}
+                </tbody>
+            </table>
+            
+            <div class="order-total">
+                <h4>Tổng cộng: ${formatCurrency(order.total)}</h4>
+            </div>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
+
+    // Bind export buttons for this order
+    const fullBtn = document.getElementById('export-order-full-btn');
+    const simpleBtn = document.getElementById('export-order-simple-btn');
+    if (fullBtn) {
+        fullBtn.onclick = () => exportOrderReceipt(order.id, true);
+    }
+    if (simpleBtn) {
+        simpleBtn.onclick = () => exportOrderReceipt(order.id, false);
+    }
+}
+
+// Inventory detail (product) modal
+function viewProductBatches(productId) {
+    const product = inventory.find(p => p.id === productId);
+    if (!product) return;
+    const modal = document.getElementById('product-batch-modal');
+    const content = document.getElementById('product-batch-content');
+    let rows = '';
+    let totalRemaining = 0;
+    product.batches.forEach(b => {
+        const batch = batches.find(x => x.id === b.batchId);
+        const used = b.used || 0;
+        const remaining = Math.max(0, (b.quantity || 0) - used);
+        totalRemaining += remaining;
+        if (remaining <= 0) return; // chỉ hiển thị lô còn hàng
+        rows += `
+            <tr>
+                <td>${b.batchId}</td>
+                <td>${batch ? String(batch.date) : ''}</td>
+                <td>${batch ? batch.supplier : ''}</td>
+                <td class="text-right">${formatNumber(remaining)}</td>
+            </tr>
+        `;
+    });
+    content.innerHTML = `
+        <div class="form-section">
+            <h3>${product.code} - ${product.name}</h3>
+            <p><strong>Danh mục:</strong> ${product.category} • <strong>Kích thước:</strong> ${product.size} • <strong>Màu:</strong> ${product.color}</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã lô</th>
+                        <th>Ngày nhập</th>
+                        <th>Nhà cung cấp</th>
+                        <th class="text-right">Còn lại</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <div class="table-footer">
+                <div class="total-records">Tổng còn lại: <strong>${formatNumber(totalRemaining)}</strong> ${product.unit || ''}</div>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'block';
+}
+
+// Batches functions
 function updateBatchesDisplay() {
     const tbody = document.getElementById('batches-tbody');
     tbody.innerHTML = '';
     
-    batches.forEach(batch => {
-        const row = createBatchRow(batch);
+    // Apply filters first
+    filteredData.batches = batches.filter(batch => {
+        return true; // No search filter for batches yet
+    });
+    
+    // Calculate pagination
+    const totalRecords = filteredData.batches.length;
+    const totalPages = Math.ceil(totalRecords / pageSize.batches);
+    const startIndex = (currentPage.batches - 1) * pageSize.batches;
+    const endIndex = Math.min(startIndex + pageSize.batches, totalRecords);
+    
+    // Update pagination info
+    document.getElementById('batches-total-records').textContent = totalRecords;
+    
+    // Display current page data
+    const currentData = filteredData.batches.slice(startIndex, endIndex);
+    currentData.forEach(batch => {
+        const totalProducts = batch.products.length;
+        const totalQuantity = batch.products.reduce((sum, p) => sum + p.quantity, 0);
+        const totalUsed = batch.products.reduce((sum, p) => sum + p.used, 0);
+        const remaining = totalQuantity - totalUsed;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${batch.id}</td>
+            <td>${String(batch.date)}</td>
+            <td>${batch.supplier}</td>
+            <td>${totalProducts}</td>
+            <td>${formatNumber(totalQuantity)}</td>
+            <td>${formatNumber(totalUsed)}</td>
+            <td>${formatNumber(remaining)}</td>
+            <td><span class="status-badge ${getStatusClass(batch.status)}">${batch.status}</span></td>
+            <td>
+                <button class="btn btn-small btn-primary" onclick="viewBatchDetail('${batch.id}')">
+                    <i class="fas fa-eye"></i> Chi tiết
+                </button>
+                <button class="btn btn-small btn-secondary" onclick="editBatch('${batch.id}')">
+                    <i class="fas fa-edit"></i> Sửa
+                </button>
+            </td>
+        `;
         tbody.appendChild(row);
     });
+    
+    // Update pagination controls
+    updatePagination('batches', totalPages);
 }
 
-function createBatchRow(batch) {
-    const row = document.createElement('tr');
+function viewBatchDetail(batchId) {
+    const batch = batches.find(b => b.id === batchId);
+    if (!batch) return;
     
-    const status = getBatchStatus(batch);
-    const statusClass = getBatchStatusClass(status);
+    const modal = document.getElementById('batch-detail-modal');
+    const content = document.getElementById('batch-detail-content');
     
-    // Calculate totals
-    const totalQuantity = batch.products.reduce((sum, product) => sum + product.quantity, 0);
-    const totalUsed = batch.products.reduce((sum, product) => sum + product.used, 0);
-    const totalRemaining = batch.products.reduce((sum, product) => sum + product.remaining, 0);
-    const productTypes = batch.products.length;
-    
-    row.innerHTML = `
-        <td><strong>${batch.id}</strong></td>
-        <td>${formatDate(batch.importDate)}</td>
-        <td>${batch.supplier || ''}</td>
-        <td><strong>${productTypes}</strong></td>
-        <td><strong>${totalQuantity}</strong></td>
-        <td>${totalUsed}</td>
-        <td><strong>${totalRemaining}</strong></td>
-        <td><span class="status-badge ${statusClass}">${status}</span></td>
-        <td>
-            <button class="btn btn-info btn-small" onclick="showBatchDetails('${batch.id}')" style="margin-right: 5px;">
-                <i class="fas fa-eye"></i> Chi Tiết
-            </button>
-            <button class="btn btn-warning btn-small" onclick="editBatch('${batch.id}')">
-                <i class="fas fa-edit"></i> Sửa
-            </button>
-        </td>
-    `;
-    
-    return row;
-}
-
-function getBatchStatus(batch) {
-    const hasRemaining = batch.products.some(p => p.remaining > 0);
-    if (!hasRemaining) return 'Hết hàng';
-    return 'Còn hàng';
-}
-
-function getBatchStatusClass(status) {
-    if (status === 'Hết hàng') return 'status-out-of-stock';
-    if (status === 'Hết hạn') return 'status-cancelled';
-    return 'status-in-stock';
-}
-
-function updateInventoryFromBatches() {
-    // Update inventory stock based on batches
-    inventory.forEach(product => {
-        let totalStock = 0;
-        batches.forEach(batch => {
-            const productInBatch = batch.products.find(p => p.productCode === product.code);
-            if (productInBatch) {
-                totalStock += productInBatch.remaining;
-            }
-        });
-        product.stock = totalStock;
+    let productsHtml = '';
+    batch.products.forEach(productData => {
+        const product = inventory.find(p => p.id === productData.productId);
+        if (product) {
+            productsHtml += `
+                <tr>
+                    <td>${product.code}</td>
+                    <td>${product.name}</td>
+                    <td>${product.unit}</td>
+                    <td>${formatNumber(productData.quantity)}</td>
+                    <td>${formatNumber(productData.used)}</td>
+                    <td>${formatNumber(productData.quantity - productData.used)}</td>
+                </tr>
+            `;
+        }
     });
     
-    saveInventoryToStorage();
-    updateInventoryDisplay();
+    content.innerHTML = `
+        <div class="batch-detail">
+            <h4>Thông tin lô hàng ${batch.id}</h4>
+            <p><strong>Nhà cung cấp:</strong> ${batch.supplier}</p>
+            <p><strong>Ngày nhập:</strong> ${batch.date}</p>
+            <p><strong>Trạng thái:</strong> <span class="status-badge ${getStatusClass(batch.status)}">${batch.status}</span></p>
+            
+            <h5>Danh sách sản phẩm:</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã SP</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Đơn vị</th>
+                        <th>Số lượng ban đầu</th>
+                        <th>Đã sử dụng</th>
+                        <th>Còn lại</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productsHtml}
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
 }
 
 // Reports functions
@@ -1375,39 +764,133 @@ function updateReportsDisplay() {
     updateInventoryDetail();
 }
 
+// Batch edit functions
+function editBatch(batchId) {
+    const batch = batches.find(b => b.id === batchId);
+    if (!batch) return;
+    const modal = document.getElementById('edit-batch-modal');
+    // Fill basic fields
+    document.getElementById('edit-batch-id').value = batch.id;
+    document.getElementById('edit-batch-supplier').value = batch.supplier || '';
+    document.getElementById('edit-batch-date').value = (String(batch.date) || '').slice(0, 10);
+
+    // Build products table
+    const tbody = document.getElementById('edit-batch-products-tbody');
+    tbody.innerHTML = '';
+    batch.products.forEach((productData, index) => {
+        const product = inventory.find(p => p.id === productData.productId);
+        if (!product) return;
+        const remaining = Math.max(0, (productData.quantity || 0) - (productData.used || 0));
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-index', String(index));
+        tr.innerHTML = `
+            <td>${product.code}</td>
+            <td>${product.name}</td>
+            <td><input type=\"number\" min=\"0\" class=\"edit-qty\" value=\"${productData.quantity}\" /></td>
+            <td><input type=\"number\" min=\"0\" class=\"edit-used\" value=\"${productData.used}\" /></td>
+            <td class=\"edit-remaining\">${formatNumber(remaining)}</td>
+            <td>
+                <button type=\"button\" class=\"btn btn-small btn-danger\" onclick=\"removeProductFromBatch(${index})\"><i class=\"fas fa-trash\"></i> Xóa</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Bind change listeners to update remaining on-the-fly
+    tbody.querySelectorAll('tr').forEach(tr => {
+        const qtyInput = tr.querySelector('.edit-qty');
+        const usedInput = tr.querySelector('.edit-used');
+        [qtyInput, usedInput].forEach(inp => {
+            inp.addEventListener('input', () => updateRemaining(tr));
+            inp.addEventListener('change', () => updateRemaining(tr));
+        });
+    });
+
+    modal.style.display = 'block';
+}
+
+function updateRemaining(tr) {
+    const qty = parseFloat((tr.querySelector('.edit-qty').value || '0')) || 0;
+    const used = parseFloat((tr.querySelector('.edit-used').value || '0')) || 0;
+    const remainingEl = tr.querySelector('.edit-remaining');
+    const remaining = Math.max(0, qty - used);
+    remainingEl.textContent = formatNumber(remaining);
+}
+
+function removeProductFromBatch(index) {
+    const batchId = document.getElementById('edit-batch-id').value;
+    const batch = batches.find(b => b.id === batchId);
+    if (!batch) return;
+    batch.products.splice(index, 1);
+    saveData();
+    // Re-render edit modal content
+    editBatch(batchId);
+}
+
+function saveBatchChanges(e) {
+    if (e) e.preventDefault();
+    const batchId = document.getElementById('edit-batch-id').value;
+    const batch = batches.find(b => b.id === batchId);
+    if (!batch) return;
+    batch.supplier = document.getElementById('edit-batch-supplier').value.trim();
+    batch.date = String(document.getElementById('edit-batch-date').value);
+
+    // Read product rows
+    const tbody = document.getElementById('edit-batch-products-tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.forEach((tr, idx) => {
+        const qty = parseFloat((tr.querySelector('.edit-qty').value || '0')) || 0;
+        const used = parseFloat((tr.querySelector('.edit-used').value || '0')) || 0;
+        if (batch.products[idx]) {
+            batch.products[idx].quantity = qty;
+            batch.products[idx].used = used;
+        }
+    });
+
+    // Recalculate inventory stock from batches to keep data consistent
+    recalcInventoryFromBatches();
+    saveData();
+    updateBatchesDisplay();
+    updateInventoryDisplay();
+    updateReportsDisplay();
+    showToast('Đã lưu thay đổi lô hàng', 'success');
+    document.getElementById('edit-batch-modal').style.display = 'none';
+}
+
+function recalcInventoryFromBatches() {
+    // For each product, sum remaining across all batches
+    inventory.forEach(item => {
+        let totalRemaining = 0;
+        batches.forEach(batch => {
+            batch.products.forEach(p => {
+                if (p.productId === item.id) {
+                    totalRemaining += Math.max(0, (p.quantity || 0) - (p.used || 0));
+                }
+            });
+        });
+        item.stock = totalRemaining;
+    });
+}
+
 function updateInventorySummary() {
     const tbody = document.getElementById('inventory-summary-tbody');
     tbody.innerHTML = '';
     
-    inventory.forEach(product => {
-        // Find all batches containing this product
-        let totalStock = 0;
-        let batchCount = 0;
-        
-        batches.forEach(batch => {
-            const productInBatch = batch.products.find(p => p.productCode === product.code);
-            if (productInBatch) {
-                totalStock += productInBatch.remaining;
-                batchCount++;
-            }
-        });
-        
-        const stockValue = totalStock * (product.referencePrice || product.sellPrice || 0);
+    inventory.forEach(item => {
+        const totalBatches = item.batches.length;
+        const totalValue = item.stock * (item.importPrice || 0);
+        const status = getStockStatus(item.stock);
         
         const row = document.createElement('tr');
-        const statusClass = getStockStatus(totalStock);
-        const statusText = getStockStatusText(totalStock);
-        
         row.innerHTML = `
-            <td><strong>${product.code}</strong></td>
-            <td>${product.name}</td>
-            <td>${product.category}</td>
-            <td><strong>${totalStock}</strong></td>
-            <td>${batchCount}</td>
-            <td>${formatCurrency(stockValue)}</td>
-            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td>${formatNumber(item.stock)}</td>
+            <td>${totalBatches}</td>
+            <td>${formatCurrency(totalValue)}</td>
+            <td><span class="status-badge ${getStatusClass(status)}">${status}</span></td>
         `;
-        
         tbody.appendChild(row);
     });
 }
@@ -1417,146 +900,122 @@ function updateInventoryDetail() {
     tbody.innerHTML = '';
     
     batches.forEach(batch => {
-        batch.products.forEach((product, index) => {
-            const row = document.createElement('tr');
-            const status = getBatchStatus(batch);
-            const statusClass = getBatchStatusClass(status);
+        batch.products.forEach(productData => {
+            const product = inventory.find(p => p.id === productData.productId);
+            if (product) {
+                const remaining = productData.quantity - productData.used;
+                const status = remaining > 0 ? 'Còn hàng' : 'Hết hàng';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${batch.id}</td>
+                    <td>${String(batch.date)}</td>
+                    <td>${batch.supplier}</td>
+                    <td>${product.code}</td>
+                    <td>${product.name}</td>
+                    <td>${formatNumber(productData.quantity)}</td>
+                    <td>${formatNumber(productData.used)}</td>
+                    <td>${formatNumber(remaining)}</td>
+                    <td><span class=\"status-badge ${getStatusClass(status)}\">${status}</span></td>
+                `;
+                tbody.appendChild(row);
+            }
+        });
+    });
+}
+
+// Filter functions
+function filterInventory() {
+    filterTable('inventory-table');
+}
+
+function filterTable(tableId) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr');
+    const searchInput = document.getElementById('search-inventory') || 
+                       document.getElementById('search-orders') || 
+                       document.getElementById('search-reports');
+    
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let show = true;
+        
+        // Global search
+        if (searchTerm) {
+            const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+            if (!rowText.includes(searchTerm)) {
+                show = false;
+            }
+        }
+        
+        // Column filters
+        const filters = table.querySelectorAll('.filter-input, .filter-select');
+        filters.forEach(filter => {
+            const columnIndex = parseInt(filter.getAttribute('data-column'));
+            const filterValue = filter.value.toLowerCase();
             
-            // Show batch info only for first product in batch
-            const batchInfo = index === 0 ? `
-                <td rowspan="${batch.products.length}"><strong>${batch.id}</strong></td>
-                <td rowspan="${batch.products.length}">${formatDate(batch.importDate)}</td>
-                <td rowspan="${batch.products.length}">${batch.supplier || 'N/A'}</td>
-                <td rowspan="${batch.products.length}"><span class="status-badge ${statusClass}">${status}</span></td>
-            ` : '';
-            
-            row.innerHTML = `
-                ${batchInfo}
-                <td>${product.productCode}</td>
-                <td>${product.productName}</td>
-                <td>${product.quantity}</td>
-                <td>${product.used}</td>
-                <td><strong>${product.remaining}</strong></td>
-            `;
-            
-            tbody.appendChild(row);
+            if (filterValue && cells[columnIndex]) {
+                const cellText = cells[columnIndex].textContent.toLowerCase();
+                if (filter.type === 'number') {
+                    const cellValue = parseFloat(cellText.replace(/[^\d.-]/g, '')) || 0;
+                    const filterNum = parseFloat(filterValue) || 0;
+                    if (cellValue < filterNum) {
+                        show = false;
+                    }
+                } else if (!cellText.includes(filterValue)) {
+                    show = false;
+                }
+            }
+        });
+        
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+// Setup column filters
+function setupColumnFilters() {
+    const tables = ['inventory-table', 'orders-table', 'inventory-summary-table', 'inventory-detail-table', 'batches-table'];
+    
+    tables.forEach(tableId => {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+        
+        const filters = table.querySelectorAll('.filter-input, .filter-select');
+        filters.forEach(filter => {
+            filter.addEventListener('input', function() {
+                filterTable(tableId);
+            });
+            filter.addEventListener('change', function() {
+                filterTable(tableId);
+            });
         });
     });
 }
 
 // Export functions
-function exportInventoryData() {
-    const data = inventory.map(product => ({
-        'Mã SP': product.code,
-        'Tên Sản Phẩm': product.name,
-        'Danh Mục': product.category,
-        'Kích Thước': product.size || '',
-        'Màu Sắc': product.color || '',
-        'Đơn Vị': product.unit,
-        'Giá Nhập': product.importPrice,
-        'Giá Tham Chiếu': product.referencePrice || product.sellPrice,
-        'Tồn Kho': product.stock,
-        'Nhà Cung Cấp': product.supplier || ''
-    }));
+function exportToCSV(tableId, filename) {
+    const table = document.getElementById(tableId);
+    const rows = table.querySelectorAll('tr');
+    let csv = [];
     
-    downloadCSV(data, 'danh-sach-kho-hang.csv');
-    showToast('Đã xuất dữ liệu kho hàng!', 'success');
-}
-
-function exportOrdersData() {
-    const data = [];
-    
-    orders.forEach(order => {
-        order.items.forEach(item => {
-            data.push({
-                'Mã Đơn': order.id,
-                'Khách Hàng': order.customerName,
-                'Ngày Tạo': formatDate(order.date),
-                'Mã SP': item.productCode,
-                'Tên Sản Phẩm': item.productName,
-                'Số Lượng': item.quantity,
-                'Đơn Giá': item.price,
-                'Thành Tiền': item.total,
-                'Tổng Đơn Hàng': order.total,
-                'Trạng Thái': getOrderStatusText(order.status)
-            });
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('th, td');
+        const rowData = Array.from(cells).map(cell => {
+            let text = cell.textContent.trim();
+            // Remove status badges and buttons
+            text = text.replace(/\s+/g, ' ').trim();
+            return `"${text}"`;
         });
+        csv.push(rowData.join(','));
     });
     
-    downloadCSV(data, 'danh-sach-don-hang.csv');
-    showToast('Đã xuất dữ liệu đơn hàng!', 'success');
-}
-
-function exportBatchesData() {
-    const data = [];
-    
-    batches.forEach(batch => {
-        batch.products.forEach(product => {
-            data.push({
-                'Mã Lô': batch.id,
-                'Ngày Nhập': formatDate(batch.importDate),
-                'Nhà Cung Cấp': batch.supplier || '',
-                'Trạng Thái': getBatchStatus(batch),
-                'Mã SP': product.productCode,
-                'Tên Sản Phẩm': product.productName,
-                'Số Lượng Ban Đầu': product.quantity,
-                'Đã Sử Dụng': product.used,
-                'Còn Lại': product.remaining
-            });
-        });
-    });
-    
-    downloadCSV(data, 'danh-sach-lo-hang.csv');
-    showToast('Đã xuất dữ liệu lô hàng!', 'success');
-}
-
-function exportSummaryData() {
-    const summaryData = inventory.map(product => {
-        // Find all batches containing this product
-        let totalStock = 0;
-        let batchCount = 0;
-        
-        batches.forEach(batch => {
-            const productInBatch = batch.products.find(p => p.productCode === product.code);
-            if (productInBatch) {
-                totalStock += productInBatch.remaining;
-                batchCount++;
-            }
-        });
-        
-        const stockValue = totalStock * (product.referencePrice || product.sellPrice || 0);
-        
-        return {
-            'Mã SP': product.code,
-            'Tên Sản Phẩm': product.name,
-            'Danh Mục': product.category,
-            'Tổng Tồn Kho': totalStock,
-            'Số Lô': batchCount,
-            'Giá Trị Tồn Kho': stockValue,
-            'Trạng Thái': getStockStatusText(totalStock)
-        };
-    });
-    
-    downloadCSV(summaryData, 'bao-cao-ton-kho.csv');
-    showToast('Đã xuất báo cáo tồn kho!', 'success');
-}
-
-function downloadCSV(data, filename) {
-    if (data.length === 0) {
-        showToast('Không có dữ liệu để xuất!', 'warning');
-        return;
-    }
-    
-    const headers = Object.keys(data[0]);
-    const csvContent = [
-        headers.join(','),
-        ...data.map(row => headers.map(header => `"${row[header] || ''}"`).join(','))
-    ].join('\n');
-    
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvContent = csv.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    
     link.setAttribute('href', url);
     link.setAttribute('download', filename);
     link.style.visibility = 'hidden';
@@ -1565,406 +1024,446 @@ function downloadCSV(data, filename) {
     document.body.removeChild(link);
 }
 
-// Updated handleExportOrder function to support two types of receipts
-function handleExportOrder(includePrice = true) {
-    const modal = document.getElementById('order-detail-modal');
-    const orderId = modal.dataset.orderId;
-    const order = orders.find(o => o.id === orderId);
+// Toast notifications
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
     
-    if (!order) {
-        showToast('Không tìm thấy đơn hàng!', 'error');
-        return;
-    }
-    
-    // Allow exporting for any status except cancelled
-    if (order.status === 'cancelled') {
-        showToast('Không thể xuất phiếu cho đơn hàng đã hủy!', 'warning');
-        return;
-    }
-    
-    // Only check stock and update batches if order is not already exported
-    if (order.status !== 'exported' && order.status !== 'completed') {
-        let canExport = true;
-        const batchUpdates = [];
-        
-        order.items.forEach(item => {
-            // Find batches containing this product
-            const availableBatches = batches.filter(batch => 
-                batch.products.some(p => p.productCode === item.productCode && p.remaining > 0)
-            ).sort((a, b) => new Date(a.importDate) - new Date(b.importDate)); // FIFO
-            
-            let remainingQuantity = item.quantity;
-            const itemBatchUpdates = [];
-            
-            for (const batch of availableBatches) {
-                if (remainingQuantity <= 0) break;
-                
-                const productInBatch = batch.products.find(p => p.productCode === item.productCode);
-                if (productInBatch && productInBatch.remaining > 0) {
-                    const useFromBatch = Math.min(remainingQuantity, productInBatch.remaining);
-                    itemBatchUpdates.push({
-                        batch: batch,
-                        productInBatch: productInBatch,
-                        quantity: useFromBatch
-                    });
-                    remainingQuantity -= useFromBatch;
-                }
-            }
-            
-            if (remainingQuantity > 0) {
-                canExport = false;
-                showToast(`Không đủ hàng trong lô cho sản phẩm ${item.productCode}!`, 'error');
-            } else {
-                batchUpdates.push(...itemBatchUpdates);
-            }
-        });
-        
-        if (canExport) {
-            // Apply batch updates
-            batchUpdates.forEach(update => {
-                update.productInBatch.used += update.quantity;
-                update.productInBatch.remaining -= update.quantity;
-            });
-            
-            // Update order status to exported
-            order.status = 'exported';
-            
-            // Save changes
-            saveBatchesToStorage();
-            saveOrdersToStorage();
-            updateInventoryFromBatches();
-            
-            // Update displays
-            updateOrdersDisplay();
-            updateBatchesDisplay();
-            updateReportsDisplay();
-        } else {
-            return; // Don't proceed if stock check failed
-        }
-    }
-    
-    // Generate and print receipt (for any status except cancelled)
-    generateReceipt(order, includePrice);
-    
-    const receiptType = includePrice ? 'đầy đủ' : 'không có giá';
-    showToast(`Đã xuất phiếu ${receiptType} thành công!`, 'success');
-    hideModal();
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
 }
 
-// Updated generateReceipt function
-function generateReceipt(order, includePrice = true) {
-    const receiptWindow = window.open('', '_blank');
-    const date = new Date(order.date).toLocaleDateString('vi-VN');
-    const receiptType = includePrice ? 'ĐẦY ĐỦ' : 'KHÔNG GIÁ';
-    
-    const priceColumns = includePrice ? `
-        <th>Đơn Giá</th>
-        <th>Thành Tiền</th>
-    ` : '';
-    
-    const priceRows = includePrice ? 
-        order.items.map(item => `<td>${formatCurrency(item.price)}</td><td>${formatCurrency(item.total)}</td>`).join('') :
-        order.items.map(() => '<td></td><td></td>').join('');
-    
-    const totalSection = includePrice ? `
-        <div class="total">
-            <strong>TỔNG TIỀN: ${formatCurrency(order.total)}</strong>
-        </div>
-    ` : '';
-    
-    const receiptHTML = `
-        <!DOCTYPE html>
+// Export order (invoice or warehouse slip)
+function exportOrderReceipt(orderId, showPrices) {
+    const order = orders.find(o => o.id === orderId);
+    if (!order) return;
+    if (order.status === 'Hủy') {
+        showToast('Đơn hàng đã hủy, không thể xuất phiếu.', 'error');
+        return;
+    }
+
+    // Build printable content
+    let rows = '';
+    order.products.forEach(p => {
+        const lineTotal = p.quantity * p.price;
+        rows += `
+            <tr>
+                <td>${p.code}</td>
+                <td>${p.name}</td>
+                <td class="text-right">${formatNumber(p.quantity)}</td>
+                ${showPrices ? `<td class=\"text-right\">${formatCurrency(p.price)}</td>` : ''}
+                ${showPrices ? `<td class=\"text-right\">${formatCurrency(lineTotal)}</td>` : ''}
+            </tr>
+        `;
+    });
+
+    const title = showPrices ? 'HÓA ĐƠN BÁN HÀNG' : 'PHIẾU XUẤT KHO';
+    const priceHeaders = showPrices ? '<th>Đơn giá</th><th>Thành tiền</th>' : '';
+    const totalBlock = showPrices ? `<h3 style=\"text-align:right\">Tổng cộng: ${formatCurrency(order.total)}</h3>` : '';
+
+    const printHtml = `
         <html>
         <head>
-            <title>Phiếu Đơn Hàng ${receiptType} - ${order.id}</title>
+            <meta charset=\"utf-8\" />
+            <title>${title} - ${order.id}</title>
             <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                .header { text-align: center; margin-bottom: 30px; }
-                .company-name { font-size: 24px; font-weight: bold; color: #2c3e50; }
-                .receipt-title { font-size: 20px; margin: 10px 0; }
-                .receipt-type { font-size: 16px; color: #e74c3c; font-weight: bold; }
-                .order-info { margin: 20px 0; }
-                .order-info div { margin: 5px 0; }
-                table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-                th { background-color: #f2f2f2; }
-                .total { text-align: right; font-size: 18px; font-weight: bold; margin: 20px 0; }
-                .footer { margin-top: 40px; text-align: center; }
-                @media print {
-                    body { margin: 0; }
-                }
+                body { font-family: Arial, sans-serif; padding: 16px; }
+                h1 { text-align: center; margin-bottom: 8px; }
+                .info p { margin: 4px 0; }
+                table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+                th, td { border: 1px solid #ccc; padding: 8px; }
+                th { background: #f5f5f5; }
+                .text-right { text-align: right; }
             </style>
         </head>
         <body>
-            <div class="header">
-                <div class="company-name">HỆ THỐNG QUẢN LÝ KHO GẠCH</div>
-                <div class="receipt-title">PHIẾU ĐƠN HÀNG</div>
-                <div class="receipt-type">PHIẾU ${receiptType}</div>
-                <div>Mã đơn: ${order.id}</div>
+            <h1>${title}</h1>
+            <div class=\"info\">
+                <p><strong>Mã đơn:</strong> ${order.id}</p>
+                <p><strong>Khách hàng:</strong> ${order.customerName}</p>
+                <p><strong>Điện thoại:</strong> ${order.customerPhone}</p>
+                <p><strong>Địa chỉ:</strong> ${order.customerAddress}</p>
+                <p><strong>Ngày:</strong> ${order.date}</p>
             </div>
-            
-            <div class="order-info">
-                <div><strong>Ngày tạo:</strong> ${date}</div>
-                <div><strong>Khách hàng:</strong> ${order.customerName}</div>
-                <div><strong>Số điện thoại:</strong> ${order.customerPhone}</div>
-                <div><strong>Địa chỉ:</strong> ${order.customerAddress}</div>
-            </div>
-            
             <table>
                 <thead>
                     <tr>
-                        <th>STT</th>
                         <th>Mã SP</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Số Lượng</th>
-                        ${priceColumns}
+                        <th>Tên SP</th>
+                        <th class=\"text-right\">SL</th>
+                        ${priceHeaders}
                     </tr>
                 </thead>
                 <tbody>
-                    ${order.items.map((item, index) => `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${item.productCode}</td>
-                            <td>${item.productName}</td>
-                            <td>${item.quantity}</td>
-                            ${includePrice ? `<td>${formatCurrency(item.price)}</td><td>${formatCurrency(item.total)}</td>` : '<td></td><td></td>'}
-                        </tr>
-                    `).join('')}
+                    ${rows}
                 </tbody>
             </table>
-            
-            ${totalSection}
-            
-            <div class="footer">
-                <p>Cảm ơn quý khách đã sử dụng dịch vụ!</p>
-                <p>Ngày in: ${new Date().toLocaleDateString('vi-VN')}</p>
-            </div>
+            ${totalBlock}
+            <script>
+                window.onload = function() { window.print(); };
+            <\/script>
         </body>
         </html>
     `;
-    
-    receiptWindow.document.write(receiptHTML);
-    receiptWindow.document.close();
-    receiptWindow.print();
-}
 
-// Utility functions
-function formatDate(dateString) {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('vi-VN');
-}
-
-function editBatch(batchId) {
-    const batch = batches.find(b => b.id === batchId);
-    if (!batch) return;
-    
-    // Fill form with batch data
-    document.getElementById('edit-batch-title').textContent = batch.id;
-    document.getElementById('edit-batch-id').value = batch.id;
-    document.getElementById('edit-batch-import-date').value = batch.importDate;
-    document.getElementById('edit-batch-supplier').value = batch.supplier || '';
-    document.getElementById('edit-batch-status').value = batch.status;
-    
-    // Display products in batch
-    const tbody = document.getElementById('edit-batch-products-tbody');
-    tbody.innerHTML = '';
-    
-    batch.products.forEach((product, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${product.productCode}</strong></td>
-            <td>${product.productName}</td>
-            <td>
-                <input type="number" id="edit-quantity-${index}" value="${product.quantity}" min="0" 
-                       onchange="updateRemaining(${index}, '${product.used}')">
-            </td>
-            <td>
-                <input type="number" id="edit-used-${index}" value="${product.used}" min="0" 
-                       onchange="updateRemaining(${index}, '${product.quantity}')">
-            </td>
-            <td><strong id="remaining-${index}">${product.remaining}</strong></td>
-            <td>
-                <button class="btn btn-danger btn-small" onclick="removeProductFromBatch('${batchId}', ${index})">
-                    <i class="fas fa-trash"></i> Xóa
-                </button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-    
-    // Store current batch ID for saving
-    document.getElementById('edit-batch-modal').dataset.batchId = batchId;
-    
-    document.getElementById('edit-batch-modal').style.display = 'block';
-}
-
-// Product batch details functions
-function showProductBatchDetails(productCode) {
-    const product = inventory.find(p => p.code === productCode);
-    if (!product) return;
-    
-    document.getElementById('product-batch-title').textContent = `${product.code} - ${product.name}`;
-    
-    // Find all batches containing this product
-    const productBatches = [];
-    batches.forEach(batch => {
-        const productInBatch = batch.products.find(p => p.productCode === productCode);
-        if (productInBatch) {
-            productBatches.push({
-                batch: batch,
-                product: productInBatch
-            });
-        }
-    });
-    
-    // Display in table
-    const tbody = document.getElementById('product-batch-tbody');
-    tbody.innerHTML = '';
-    
-    if (productBatches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center">Không có lô hàng nào chứa sản phẩm này</td></tr>';
-    } else {
-        productBatches.forEach(({ batch, product }) => {
-            const row = document.createElement('tr');
-            const status = getBatchStatus(batch);
-            const statusClass = getBatchStatusClass(status);
-            
-            row.innerHTML = `
-                <td><strong>${batch.id}</strong></td>
-                <td>${formatDate(batch.importDate)}</td>
-                <td>${batch.expiryDate ? formatDate(batch.expiryDate) : 'N/A'}</td>
-                <td>${batch.supplier || 'N/A'}</td>
-                <td>${product.quantity}</td>
-                <td>${product.used}</td>
-                <td><strong>${product.remaining}</strong></td>
-                <td><span class="status-badge ${statusClass}">${status}</span></td>
-            `;
-            
-            tbody.appendChild(row);
-        });
+    const win = window.open('', '_blank');
+    if (win) {
+        win.document.open();
+        win.document.write(printHtml);
+        win.document.close();
     }
-    
-    document.getElementById('product-batch-modal').style.display = 'block';
+
+    // Update status to Exported if not already
+    if (order.status !== 'Đã xuất phiếu') {
+        order.status = 'Đã xuất phiếu';
+        saveData();
+        updateOrdersDisplay();
+        showToast('Đã cập nhật trạng thái: Đã xuất phiếu', 'success');
+    }
 }
 
-function hideProductBatchModal() {
-    document.getElementById('product-batch-modal').style.display = 'none';
-}
-
-// Batch detail functions
-function showBatchDetails(batchId) {
-    const batch = batches.find(b => b.id === batchId);
-    if (!batch) return;
-    
-    document.getElementById('batch-detail-title').textContent = batch.id;
-    document.getElementById('batch-detail-id').textContent = batch.id;
-    document.getElementById('batch-detail-import-date').textContent = formatDate(batch.importDate);
-    document.getElementById('batch-detail-supplier').textContent = batch.supplier || 'N/A';
-    
-    const status = getBatchStatus(batch);
-    const statusClass = getBatchStatusClass(status);
-    document.getElementById('batch-detail-status').innerHTML = `<span class="status-badge ${statusClass}">${status}</span>`;
-    
-    // Display products in batch
-    const tbody = document.getElementById('batch-detail-tbody');
-    tbody.innerHTML = '';
-    
-    batch.products.forEach(product => {
-        const productInfo = inventory.find(p => p.code === product.productCode);
-        const row = document.createElement('tr');
-        
-        row.innerHTML = `
-            <td><strong>${product.productCode}</strong></td>
-            <td>${product.productName}</td>
-            <td>${productInfo ? productInfo.category : 'N/A'}</td>
-            <td>${productInfo ? (productInfo.size || 'N/A') : 'N/A'}</td>
-            <td>${productInfo ? (productInfo.color || 'N/A') : 'N/A'}</td>
-            <td>${productInfo ? productInfo.unit : 'N/A'}</td>
-            <td>${productInfo ? formatCurrency(productInfo.importPrice) : 'N/A'}</td>
-            <td>${productInfo ? formatCurrency(productInfo.referencePrice || productInfo.sellPrice) : 'N/A'}</td>
-            <td>${product.quantity}</td>
-            <td>${product.used}</td>
-            <td><strong>${product.remaining}</strong></td>
-        `;
-        
-        tbody.appendChild(row);
-    });
-    
-    document.getElementById('batch-detail-modal').style.display = 'block';
-}
-
-function hideBatchDetailModal() {
-    document.getElementById('batch-detail-modal').style.display = 'none';
-}
-
-// Edit batch functions
-function hideEditBatchModal() {
-    document.getElementById('edit-batch-modal').style.display = 'none';
-}
-
-function updateRemaining(index, otherValue) {
-    const quantity = parseInt(document.getElementById(`edit-quantity-${index}`).value) || 0;
-    const used = parseInt(document.getElementById(`edit-used-${index}`).value) || 0;
-    const remaining = Math.max(0, quantity - used);
-    document.getElementById(`remaining-${index}`).textContent = remaining;
-}
-
-function removeProductFromBatch(batchId, productIndex) {
-    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi lô hàng?')) {
-        const batch = batches.find(b => b.id === batchId);
-        if (batch && batch.products[productIndex]) {
-            batch.products.splice(productIndex, 1);
-            
-            // If no products left, remove the batch
-            if (batch.products.length === 0) {
-                const batchIndex = batches.findIndex(b => b.id === batchId);
-                batches.splice(batchIndex, 1);
-                saveBatchesToStorage();
-                updateBatchesDisplay();
-                updateInventoryFromBatches();
-                hideEditBatchModal();
-                showToast('Đã xóa lô hàng vì không còn sản phẩm nào!', 'warning');
-            } else {
-                // Update the edit modal
-                editBatch(batchId);
-                showToast('Đã xóa sản phẩm khỏi lô hàng!', 'success');
+// Initialize sample data
+function initializeSampleData() {
+    // Add some sample orders
+    if (orders.length === 0) {
+        orders = [
+            {
+                id: 'HD001',
+                customerName: 'Nguyễn Văn A',
+                customerPhone: '0123456789',
+                customerAddress: '123 Đường ABC, Quận 1, TP.HCM',
+                date: '2024-01-20',
+                products: [
+                    { code: 'G001', name: 'Gạch men 30x30 trắng', quantity: 100, price: 35000 },
+                    { code: 'G002', name: 'Gạch granite 60x60 đen', quantity: 50, price: 65000 }
+                ],
+                total: 6750000,
+                status: 'Hoàn thành'
+            },
+            {
+                id: 'HD002',
+                customerName: 'Trần Thị B',
+                customerPhone: '0987654321',
+                customerAddress: '456 Đường XYZ, Quận 2, TP.HCM',
+                date: '2024-01-22',
+                products: [
+                    { code: 'G003', name: 'Gạch ốp tường 25x40 xanh', quantity: 200, price: 28000 }
+                ],
+                total: 5600000,
+                status: 'Đang xử lý'
             }
-        }
+        ];
+        saveData();
     }
 }
 
-function saveBatchChanges() {
-    const batchId = document.getElementById('edit-batch-modal').dataset.batchId;
-    const batch = batches.find(b => b.id === batchId);
-    if (!batch) return;
+// Pagination functions
+function updatePagination(tableType, totalPages) {
+    const prevBtn = document.getElementById(`${tableType}-prev`);
+    const nextBtn = document.getElementById(`${tableType}-next`);
+    const pageNumbers = document.getElementById(`${tableType}-page-numbers`);
     
-    // Update batch info
-    batch.importDate = document.getElementById('edit-batch-import-date').value;
-    batch.supplier = document.getElementById('edit-batch-supplier').value;
-    batch.status = document.getElementById('edit-batch-status').value;
+    // Update prev/next buttons
+    prevBtn.disabled = currentPage[tableType] <= 1;
+    nextBtn.disabled = currentPage[tableType] >= totalPages;
     
-    // Update products
-    const tbody = document.getElementById('edit-batch-products-tbody');
-    const rows = tbody.querySelectorAll('tr');
+    // Update page numbers
+    pageNumbers.innerHTML = '';
     
-    rows.forEach((row, index) => {
-        if (batch.products[index]) {
-            const quantity = parseInt(document.getElementById(`edit-quantity-${index}`).value) || 0;
-            const used = parseInt(document.getElementById(`edit-used-${index}`).value) || 0;
-            const remaining = Math.max(0, quantity - used);
-            
-            batch.products[index].quantity = quantity;
-            batch.products[index].used = used;
-            batch.products[index].remaining = remaining;
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage[tableType] - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.textContent = i;
+        pageBtn.className = i === currentPage[tableType] ? 'active' : '';
+        pageBtn.onclick = () => goToPage(tableType, i);
+        pageNumbers.appendChild(pageBtn);
+    }
+}
+
+function goToPage(tableType, page) {
+    currentPage[tableType] = page;
+    switch(tableType) {
+        case 'inventory':
+            updateInventoryDisplay();
+            break;
+        case 'orders':
+            updateOrdersDisplay();
+            break;
+        case 'batches':
+            updateBatchesDisplay();
+            break;
+        case 'reports':
+            updateReportsDisplay();
+            break;
+    }
+}
+
+function changePageSize(tableType, newSize) {
+    pageSize[tableType] = parseInt(newSize);
+    currentPage[tableType] = 1;
+    switch(tableType) {
+        case 'inventory':
+            updateInventoryDisplay();
+            break;
+        case 'orders':
+            updateOrdersDisplay();
+            break;
+        case 'batches':
+            updateBatchesDisplay();
+            break;
+        case 'reports':
+            updateReportsDisplay();
+            break;
+    }
+}
+
+// Setup pagination event listeners
+function setupPaginationListeners() {
+    // Inventory pagination
+    document.getElementById('inventory-prev').addEventListener('click', () => {
+        if (currentPage.inventory > 1) {
+            goToPage('inventory', currentPage.inventory - 1);
         }
     });
     
-    // Save changes
-    saveBatchesToStorage();
-    updateInventoryFromBatches();
+    document.getElementById('inventory-next').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.inventory.length / pageSize.inventory);
+        if (currentPage.inventory < totalPages) {
+            goToPage('inventory', currentPage.inventory + 1);
+        }
+    });
+    
+    document.getElementById('inventory-page-size').addEventListener('change', (e) => {
+        changePageSize('inventory', e.target.value);
+    });
+    
+    // Orders pagination
+    document.getElementById('orders-prev').addEventListener('click', () => {
+        if (currentPage.orders > 1) {
+            goToPage('orders', currentPage.orders - 1);
+        }
+    });
+    
+    document.getElementById('orders-next').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.orders.length / pageSize.orders);
+        if (currentPage.orders < totalPages) {
+            goToPage('orders', currentPage.orders + 1);
+        }
+    });
+    
+    document.getElementById('orders-page-size').addEventListener('change', (e) => {
+        changePageSize('orders', e.target.value);
+    });
+    
+    // Batches pagination
+    document.getElementById('batches-prev').addEventListener('click', () => {
+        if (currentPage.batches > 1) {
+            goToPage('batches', currentPage.batches - 1);
+        }
+    });
+    
+    document.getElementById('batches-next').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.batches.length / pageSize.batches);
+        if (currentPage.batches < totalPages) {
+            goToPage('batches', currentPage.batches + 1);
+        }
+    });
+    
+    document.getElementById('batches-page-size').addEventListener('change', (e) => {
+        changePageSize('batches', e.target.value);
+    });
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSampleData();
+    loadData();
+    setupEventListeners();
+    setupPaginationListeners();
+    updateInventoryDisplay();
+    updateOrdersDisplay();
     updateBatchesDisplay();
     updateReportsDisplay();
-    
-    showToast('Đã cập nhật lô hàng thành công!', 'success');
-    hideEditBatchModal();
+    setupColumnFilters();
+    // expose functions for inline handlers
+    window.viewOrderDetail = viewOrderDetail;
+    window.viewProductBatches = viewProductBatches;
+    window.addOrderItem = addOrderItem;
+    window.addImportItem = addImportItem;
+});
+
+// -----------------------------
+// Add/Remove product rows & submit handlers
+// -----------------------------
+
+function createOrderItemRow() {
+    const div = document.createElement('div');
+    div.className = 'form-row';
+    div.innerHTML = `
+        <div class="form-group">
+            <label>Mã SP</label>
+            <input type="text" class="order-code" placeholder="VD: G001">
+        </div>
+        <div class="form-group">
+            <label>Tên SP</label>
+            <input type="text" class="order-name" placeholder="Tên sản phẩm">
+        </div>
+        <div class="form-group">
+            <label>Số lượng</label>
+            <input type="number" class="order-qty" min="1" value="1">
+        </div>
+        <div class="form-group">
+            <label>Đơn giá (VNĐ)</label>
+            <input type="number" class="order-price" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label>&nbsp;</label>
+            <button type="button" class="btn btn-danger btn-small remove-order-item">Xóa</button>
+        </div>
+    `;
+    div.querySelector('.remove-order-item').addEventListener('click', () => div.remove());
+    return div;
+}
+
+function addOrderItem() {
+    const container = document.getElementById('order-items');
+    if (!container) return;
+    container.appendChild(createOrderItemRow());
+}
+
+function createImportItemRow() {
+    const div = document.createElement('div');
+    div.className = 'form-row';
+    div.innerHTML = `
+        <div class="form-group">
+            <label>Mã SP</label>
+            <input type="text" class="import-code" placeholder="VD: G001">
+        </div>
+        <div class="form-group">
+            <label>Tên SP</label>
+            <input type="text" class="import-name" placeholder="Tên sản phẩm">
+        </div>
+        <div class="form-group">
+            <label>Số lượng nhập</label>
+            <input type="number" class="import-qty" min="1" value="1">
+        </div>
+        <div class="form-group">
+            <label>Giá nhập (VNĐ)</label>
+            <input type="number" class="import-price" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label>&nbsp;</label>
+            <button type="button" class="btn btn-danger btn-small remove-import-item">Xóa</button>
+        </div>
+    `;
+    div.querySelector('.remove-import-item').addEventListener('click', () => div.remove());
+    return div;
+}
+
+function addImportItem() {
+    const container = document.getElementById('import-items');
+    if (!container) return;
+    container.appendChild(createImportItemRow());
+}
+
+function handleCreateOrder(e) {
+    e.preventDefault();
+    const name = document.getElementById('customer-name').value.trim();
+    const phone = document.getElementById('customer-phone').value.trim();
+    const address = document.getElementById('customer-address').value.trim();
+    const itemsContainer = document.getElementById('order-items');
+    const rows = itemsContainer ? itemsContainer.querySelectorAll('.form-row') : [];
+    let products = [];
+    let total = 0;
+    rows.forEach(r => {
+        const code = r.querySelector('.order-code').value.trim();
+        const pname = r.querySelector('.order-name').value.trim();
+        const qty = parseInt(r.querySelector('.order-qty').value) || 0;
+        const price = parseInt(r.querySelector('.order-price').value) || 0;
+        if (code && pname && qty > 0) {
+            products.push({ code, name: pname, quantity: qty, price });
+            total += qty * price;
+        }
+    });
+    if (products.length === 0) {
+        showToast('Vui lòng thêm ít nhất 1 sản phẩm', 'warning');
+        return;
+    }
+    const id = `HD${String(currentOrderId).padStart(3, '0')}`;
+    currentOrderId += 1;
+    const order = {
+        id,
+        customerName: name,
+        customerPhone: phone,
+        customerAddress: address,
+        date: new Date().toISOString().slice(0,10),
+        products,
+        total,
+        status: 'Đang xử lý'
+    };
+    orders.unshift(order);
+    saveData();
+    updateOrdersDisplay();
+    showToast('Đã tạo đơn hàng mới', 'success');
+    e.target.reset();
+    const container = document.getElementById('order-items');
+    if (container) { container.innerHTML = ''; addOrderItem(); }
+}
+
+function handleImportProducts(e) {
+    e.preventDefault();
+    const supplier = document.getElementById('supplier').value.trim();
+    const date = document.getElementById('import-date').value || new Date().toISOString().slice(0,10);
+    const itemsContainer = document.getElementById('import-items');
+    const rows = itemsContainer ? itemsContainer.querySelectorAll('.form-row') : [];
+    let productsToAdd = [];
+    rows.forEach(r => {
+        const code = r.querySelector('.import-code').value.trim();
+        const name = r.querySelector('.import-name').value.trim();
+        const qty = parseInt(r.querySelector('.import-qty').value) || 0;
+        const price = parseInt(r.querySelector('.import-price').value) || 0;
+        if (code && name && qty > 0) {
+            // Update or insert inventory item
+            let item = inventory.find(p => p.code === code);
+            if (!item) {
+                item = {
+                    id: inventory.length ? Math.max(...inventory.map(i=>i.id))+1 : 1,
+                    code, name,
+                    category: 'Khác', unit: 'Viên', size: '', color: '',
+                    importPrice: price, referencePrice: price,
+                    stock: 0, supplier,
+                    batches: []
+                };
+                inventory.push(item);
+            }
+            item.importPrice = price || item.importPrice;
+            item.stock += qty;
+            productsToAdd.push({ productId: item.id, quantity: qty, used: 0 });
+        }
+    });
+    const batchId = `L${String(currentBatchId).padStart(3, '0')}`;
+    currentBatchId += 1;
+    batches.unshift({ id: batchId, date: String(date), supplier, products: productsToAdd, status: 'Còn hàng' });
+    // Link batches to inventory
+    productsToAdd.forEach(p => {
+        const item = inventory.find(x => x.id === p.productId);
+        if (item) item.batches.push({ batchId, quantity: p.quantity, used: 0 });
+    });
+    saveData();
+    updateInventoryDisplay();
+    updateBatchesDisplay();
+    showToast(`Đã nhập kho lô ${batchId}`, 'success');
+    e.target.reset();
+    const container = document.getElementById('import-items');
+    if (container) { container.innerHTML = ''; addImportItem(); }
 }
