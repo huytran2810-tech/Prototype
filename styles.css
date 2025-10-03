@@ -389,14 +389,22 @@ tbody tr:last-child td {
 
 .form-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr 1.5fr 120px 150px 150px 60px;
     gap: 16px;
     margin-bottom: 16px;
+    align-items: end;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
+}
+
+.form-group-small {
+    display: flex;
+    flex-direction: column;
+    min-width: 60px;
+    max-width: 80px;
 }
 
 .form-group label {
@@ -709,6 +717,11 @@ tbody tr:last-child td {
     
     .form-row {
         grid-template-columns: 1fr;
+    }
+    
+    .form-group-small {
+        min-width: auto;
+        max-width: none;
     }
 }
 

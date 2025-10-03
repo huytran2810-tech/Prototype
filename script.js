@@ -1362,8 +1362,14 @@ function createImportItemRow() {
             <input type="number" class="import-price" min="0" value="0">
         </div>
         <div class="form-group">
+            <label>Giá tham chiếu (VNĐ)</label>
+            <input type="number" class="import-reference-price" min="0" value="0">
+        </div>
+        <div class="form-group form-group-small">
             <label>&nbsp;</label>
-            <button type="button" class="btn btn-danger btn-small remove-import-item">Xóa</button>
+            <button type="button" class="btn btn-danger btn-small remove-import-item">
+                <i class="fas fa-trash"></i>
+            </button>
         </div>
     `;
     div.querySelector('.remove-import-item').addEventListener('click', () => div.remove());
@@ -1432,6 +1438,7 @@ function handleImportProducts(e) {
         const name = r.querySelector('.import-name').value.trim();
         const qty = parseInt(r.querySelector('.import-qty').value) || 0;
         const price = parseInt(r.querySelector('.import-price').value) || 0;
+        const referencePrice = parseInt(r.querySelector('.import-reference-price').value) || 0;
         if (code && name && qty > 0) {
             // Update or insert inventory item
             let item = inventory.find(p => p.code === code);
@@ -1440,13 +1447,16 @@ function handleImportProducts(e) {
                     id: inventory.length ? Math.max(...inventory.map(i=>i.id))+1 : 1,
                     code, name,
                     category: 'Khác', unit: 'Viên', size: '', color: '',
-                    importPrice: price, referencePrice: price,
+                    importPrice: price, referencePrice: referencePrice || price,
                     stock: 0, supplier,
                     batches: []
                 };
                 inventory.push(item);
             }
             item.importPrice = price || item.importPrice;
+            if (referencePrice > 0) {
+                item.referencePrice = referencePrice;
+            }
             item.stock += qty;
             productsToAdd.push({ productId: item.id, quantity: qty, used: 0 });
         }
