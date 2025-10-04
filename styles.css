@@ -389,10 +389,14 @@ tbody tr:last-child td {
 
 .form-row {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 120px 150px 150px 60px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
     margin-bottom: 16px;
     align-items: end;
+}
+
+.form-row.import-items {
+    grid-template-columns: 1fr 1.5fr 120px 100px 120px 80px 120px 120px 60px;
 }
 
 .form-group {
@@ -405,6 +409,60 @@ tbody tr:last-child td {
     flex-direction: column;
     min-width: 60px;
     max-width: 80px;
+}
+
+/* Search suggestions styles */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.suggestion-item:hover {
+    background-color: #f8fafc;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-code {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.suggestion-name {
+    color: #374151;
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.suggestion-details {
+    color: #6b7280;
+    font-size: 12px;
 }
 
 .form-group label {
@@ -716,6 +774,10 @@ tbody tr:last-child td {
     }
     
     .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row.import-items {
         grid-template-columns: 1fr;
     }
     

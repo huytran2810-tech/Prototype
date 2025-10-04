@@ -5,174 +5,510 @@
 let inventory = [
     {
         id: 1,
-        code: 'G001',
-        name: 'Gạch men 30x30 Viglacera',
-        category: 'Gạch men',
-        unit: 'Viên',
-        size: '30x30cm',
-        color: 'Trắng',
-        importPrice: 45000,
-        referencePrice: 55000,
-        stock: 500,
-        supplier: 'Viglacera',
+        code: 'GOT-CER-3060-WK',
+        name: 'Gạch ốp tường Ceramic 30x60cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '30x60cm',
+        color: 'Trắng kem',
+        importPrice: 450000,
+        referencePrice: 520000,
+        stock: 25,
+        supplier: 'Công ty Gạch Đồng Nai',
         batches: [
-            { batchId: 'L001', quantity: 300, used: 0 },
-            { batchId: 'L002', quantity: 200, used: 0 }
+            { batchId: 'L001', quantity: 25, used: 0 }
         ]
     },
     {
         id: 2,
-        code: 'G002',
-        name: 'Gạch granite 60x60 Đồng Tâm',
-        category: 'Gạch granite',
-        unit: 'Viên',
-        size: '60x60cm',
+        code: 'GLN-GRA-4040-XD',
+        name: 'Gạch lát nền Granite 40x40cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '40x40cm',
         color: 'Xám đá',
-        importPrice: 120000,
-        referencePrice: 150000,
-        stock: 200,
-        supplier: 'Đồng Tâm',
+        importPrice: 380000,
+        referencePrice: 450000,
+        stock: 20,
+        supplier: 'Công ty Gạch Bình Dương',
         batches: [
-            { batchId: 'L001', quantity: 200, used: 0 }
+            { batchId: 'L002', quantity: 20, used: 0 }
         ]
     },
     {
         id: 3,
-        code: 'G003',
-        name: 'Gạch ốp tường 25x40 Prime',
-        category: 'Gạch ốp tường',
-        unit: 'Viên',
-        size: '25x40cm',
-        color: 'Kem',
-        importPrice: 35000,
-        referencePrice: 45000,
-        stock: 800,
-        supplier: 'Prime Group',
+        code: 'GTT-MOS-1010-XN',
+        name: 'Gạch trang trí Mosaic 10x10cm',
+        category: 'Gạch trang trí',
+        unit: 'Hộp',
+        size: '10x10cm',
+        color: 'Xanh ngọc',
+        importPrice: 280000,
+        referencePrice: 320000,
+        stock: 15,
+        supplier: 'Công ty Gạch Long An',
         batches: [
-            { batchId: 'L002', quantity: 800, used: 0 }
+            { batchId: 'L003', quantity: 15, used: 0 }
         ]
     },
     {
         id: 4,
-        code: 'G004',
-        name: 'Gạch lát nền 80x80 Mikado',
-        category: 'Gạch lát nền',
-        unit: 'Viên',
-        size: '80x80cm',
-        color: 'Vân gỗ',
-        importPrice: 180000,
-        referencePrice: 220000,
-        stock: 150,
-        supplier: 'Mikado',
+        code: 'GOT-CER-2540-VC',
+        name: 'Gạch ốp tường Ceramic 25x40cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '25x40cm',
+        color: 'Vàng cát',
+        importPrice: 320000,
+        referencePrice: 380000,
+        stock: 30,
+        supplier: 'Công ty Gạch Đồng Nai',
         batches: [
-            { batchId: 'L001', quantity: 100, used: 0 },
-            { batchId: 'L003', quantity: 50, used: 0 }
+            { batchId: 'L001', quantity: 30, used: 0 }
         ]
     },
     {
         id: 5,
-        code: 'G005',
-        name: 'Gạch mosaic thủy tinh',
-        category: 'Gạch mosaic',
-        unit: 'Tấm',
-        size: '30x30cm',
-        color: 'Xanh dương',
-        importPrice: 25000,
-        referencePrice: 35000,
-        stock: 300,
-        supplier: 'Mosaic Pro',
-        batches: [
-            { batchId: 'L003', quantity: 300, used: 0 }
-        ]
+        code: 'GLN-POR-5050-NG',
+        name: 'Gạch lát nền Porcelain 50x50cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '50x50cm',
+        color: 'Nâu gỗ',
+        importPrice: 520000,
+        referencePrice: 600000,
+        stock: 18,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
     },
     {
         id: 6,
-        code: 'G006',
-        name: 'Gạch ceramic 40x40',
-        category: 'Gạch ceramic',
-        unit: 'Viên',
-        size: '40x40cm',
-        color: 'Be',
-        importPrice: 28000,
-        referencePrice: 38000,
-        stock: 400,
-        supplier: 'Ceramic Plus',
+        code: 'GOT-CER-2030-XL',
+        name: 'Gạch ốp tường Ceramic 20x30cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '20x30cm',
+        color: 'Xanh lá',
+        importPrice: 280000,
+        referencePrice: 330000,
+        stock: 22,
+        supplier: 'Công ty Gạch Long An',
         batches: [
-            { batchId: 'L001', quantity: 200, used: 0 },
-            { batchId: 'L002', quantity: 200, used: 0 }
+            { batchId: 'L003', quantity: 22, used: 0 }
         ]
     },
     {
         id: 7,
-        code: 'G007',
-        name: 'Gạch porcelain 60x60',
-        category: 'Gạch porcelain',
-        unit: 'Viên',
+        code: 'GLN-GRA-6060-DB',
+        name: 'Gạch lát nền Granite 60x60cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
         size: '60x60cm',
-        color: 'Trắng sứ',
-        importPrice: 95000,
-        referencePrice: 125000,
-        stock: 120,
-        supplier: 'Porcelain Elite',
+        color: 'Đen bóng',
+        importPrice: 680000,
+        referencePrice: 780000,
+        stock: 12,
+        supplier: 'Công ty Gạch Bình Dương',
         batches: [
-            { batchId: 'L003', quantity: 120, used: 0 }
+            { batchId: 'L002', quantity: 12, used: 0 }
         ]
     },
     {
         id: 8,
-        code: 'G008',
-        name: 'Gạch terrazzo 50x50',
-        category: 'Gạch terrazzo',
-        unit: 'Viên',
-        size: '50x50cm',
-        color: 'Xám đá',
-        importPrice: 75000,
-        referencePrice: 95000,
-        stock: 180,
-        supplier: 'Terrazzo Master',
+        code: 'GTT-MOS-1515-DG',
+        name: 'Gạch trang trí Mosaic 15x15cm',
+        category: 'Gạch trang trí',
+        unit: 'Hộp',
+        size: '15x15cm',
+        color: 'Đỏ gạch',
+        importPrice: 350000,
+        referencePrice: 400000,
+        stock: 8,
+        supplier: 'Công ty Gạch Long An',
         batches: [
-            { batchId: 'L001', quantity: 100, used: 0 },
-            { batchId: 'L002', quantity: 80, used: 0 }
+            { batchId: 'L003', quantity: 8, used: 0 }
         ]
+    },
+    {
+        id: 9,
+        code: 'GOT-CER-3045-XN',
+        name: 'Gạch ốp tường Ceramic 30x45cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '30x45cm',
+        color: 'Xám nhạt',
+        importPrice: 420000,
+        referencePrice: 480000,
+        stock: 28,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: [
+            { batchId: 'L001', quantity: 28, used: 0 }
+        ]
+    },
+    {
+        id: 10,
+        code: 'GLN-POR-4545-TS',
+        name: 'Gạch lát nền Porcelain 45x45cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '45x45cm',
+        color: 'Trắng sứ',
+        importPrice: 450000,
+        referencePrice: 520000,
+        stock: 35,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: [
+            { batchId: 'L002', quantity: 35, used: 0 }
+        ]
+    },
+    {
+        id: 11,
+        code: 'GOT-CER-2550-BK',
+        name: 'Gạch ốp tường Ceramic 25x50cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '25x50cm',
+        color: 'Be kem',
+        importPrice: 380000,
+        referencePrice: 440000,
+        stock: 24,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 12,
+        code: 'GLN-GRA-3030-XD',
+        name: 'Gạch lát nền Granite 30x30cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '30x30cm',
+        color: 'Xanh đen',
+        importPrice: 320000,
+        referencePrice: 370000,
+        stock: 40,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 13,
+        code: 'GTT-MOS-2020-VK',
+        name: 'Gạch trang trí Mosaic 20x20cm',
+        category: 'Gạch trang trí',
+        unit: 'Hộp',
+        size: '20x20cm',
+        color: 'Vàng kim',
+        importPrice: 420000,
+        referencePrice: 480000,
+        stock: 10,
+        supplier: 'Công ty Gạch Long An',
+        batches: []
+    },
+    {
+        id: 14,
+        code: 'GOT-CER-3535-HP',
+        name: 'Gạch ốp tường Ceramic 35x35cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '35x35cm',
+        color: 'Hồng phấn',
+        importPrice: 350000,
+        referencePrice: 400000,
+        stock: 16,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 15,
+        code: 'GLN-POR-5555-XB',
+        name: 'Gạch lát nền Porcelain 55x55cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '55x55cm',
+        color: 'Xám bạc',
+        importPrice: 580000,
+        referencePrice: 660000,
+        stock: 14,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 16,
+        code: 'GOT-CER-2040-XD',
+        name: 'Gạch ốp tường Ceramic 20x40cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '20x40cm',
+        color: 'Xanh dương',
+        importPrice: 300000,
+        referencePrice: 350000,
+        stock: 32,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 17,
+        code: 'GLN-GRA-4545-ND',
+        name: 'Gạch lát nền Granite 45x45cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '45x45cm',
+        color: 'Nâu đậm',
+        importPrice: 480000,
+        referencePrice: 550000,
+        stock: 26,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 18,
+        code: 'GTT-MOS-1212-TT',
+        name: 'Gạch trang trí Mosaic 12x12cm',
+        category: 'Gạch trang trí',
+        unit: 'Hộp',
+        size: '12x12cm',
+        color: 'Tím than',
+        importPrice: 320000,
+        referencePrice: 370000,
+        stock: 12,
+        supplier: 'Công ty Gạch Long An',
+        batches: []
+    },
+    {
+        id: 19,
+        code: 'GOT-CER-3030-XNB',
+        name: 'Gạch ốp tường Ceramic 30x30cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '30x30cm',
+        color: 'Xanh ngọc bích',
+        importPrice: 280000,
+        referencePrice: 330000,
+        stock: 38,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 20,
+        code: 'GLN-POR-4040-TN',
+        name: 'Gạch lát nền Porcelain 40x40cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '40x40cm',
+        color: 'Trắng ngà',
+        importPrice: 420000,
+        referencePrice: 480000,
+        stock: 42,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 21,
+        code: 'GOT-CER-2535-CD',
+        name: 'Gạch ốp tường Ceramic 25x35cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '25x35cm',
+        color: 'Cam đất',
+        importPrice: 340000,
+        referencePrice: 390000,
+        stock: 20,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 22,
+        code: 'GLN-GRA-5050-DX',
+        name: 'Gạch lát nền Granite 50x50cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '50x50cm',
+        color: 'Đen xám',
+        importPrice: 550000,
+        referencePrice: 630000,
+        stock: 18,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 23,
+        code: 'GTT-MOS-1818-XLC',
+        name: 'Gạch trang trí Mosaic 18x18cm',
+        category: 'Gạch trang trí',
+        unit: 'Hộp',
+        size: '18x18cm',
+        color: 'Xanh lá cây',
+        importPrice: 380000,
+        referencePrice: 430000,
+        stock: 9,
+        supplier: 'Công ty Gạch Long An',
+        batches: []
+    },
+    {
+        id: 24,
+        code: 'GOT-CER-3540-HSH',
+        name: 'Gạch ốp tường Ceramic 35x40cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '35x40cm',
+        color: 'Hồng san hô',
+        importPrice: 400000,
+        referencePrice: 460000,
+        stock: 22,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 25,
+        code: 'GLN-POR-6060-XX',
+        name: 'Gạch lát nền Porcelain 60x60cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '60x60cm',
+        color: 'Xám xanh',
+        importPrice: 720000,
+        referencePrice: 820000,
+        stock: 8,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 26,
+        code: 'GOT-CER-2025-VC',
+        name: 'Gạch ốp tường Ceramic 20x25cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '20x25cm',
+        color: 'Vàng chanh',
+        importPrice: 260000,
+        referencePrice: 300000,
+        stock: 45,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 27,
+        code: 'GLN-GRA-3535-NS',
+        name: 'Gạch lát nền Granite 35x35cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '35x35cm',
+        color: 'Nâu sáng',
+        importPrice: 380000,
+        referencePrice: 440000,
+        stock: 30,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
+    },
+    {
+        id: 28,
+        code: 'GTT-MOS-1616-DB',
+        name: 'Gạch trang trí Mosaic 16x16cm',
+        category: 'Gạch trang trí',
+        unit: 'Hộp',
+        size: '16x16cm',
+        color: 'Đỏ burgundy',
+        importPrice: 360000,
+        referencePrice: 410000,
+        stock: 11,
+        supplier: 'Công ty Gạch Long An',
+        batches: []
+    },
+    {
+        id: 29,
+        code: 'GOT-CER-3050-XM',
+        name: 'Gạch ốp tường Ceramic 30x50cm',
+        category: 'Gạch ốp tường',
+        unit: 'Hộp',
+        size: '30x50cm',
+        color: 'Xanh mint',
+        importPrice: 440000,
+        referencePrice: 500000,
+        stock: 19,
+        supplier: 'Công ty Gạch Đồng Nai',
+        batches: []
+    },
+    {
+        id: 30,
+        code: 'GLN-POR-4545-TT',
+        name: 'Gạch lát nền Porcelain 45x45cm',
+        category: 'Gạch lát nền',
+        unit: 'Hộp',
+        size: '45x45cm',
+        color: 'Trắng tuyết',
+        importPrice: 480000,
+        referencePrice: 550000,
+        stock: 36,
+        supplier: 'Công ty Gạch Bình Dương',
+        batches: []
     }
 ];
 
-let orders = [];
+let orders = [
+    {
+        id: 'DH001',
+        customer: 'Công ty Xây dựng ABC',
+        phone: '0901234567',
+        address: '123 Đường ABC, Quận 1, TP.HCM',
+        date: '2024-01-20',
+        items: [
+            { productId: 1, quantity: 5, price: 520000 },
+            { productId: 2, quantity: 3, price: 450000 }
+        ],
+        status: 'Hoàn thành',
+        total: 3950000
+    },
+    {
+        id: 'DH002',
+        customer: 'Nhà thầu XYZ',
+        phone: '0907654321',
+        address: '456 Đường XYZ, Quận 3, TP.HCM',
+        date: '2024-01-22',
+        items: [
+            { productId: 3, quantity: 2, price: 320000 },
+            { productId: 4, quantity: 4, price: 380000 }
+        ],
+        status: 'Đang xử lý',
+        total: 2160000
+    }
+];
+
 let batches = [
     {
         id: 'L001',
         date: '2024-01-15',
-        supplier: 'Công ty Gạch Men ABC',
+        supplier: 'Công ty Gạch Đồng Nai',
         products: [
-            { productId: 1, quantity: 500, used: 0 },
-            { productId: 4, quantity: 300, used: 0 }
+            { productId: 1, quantity: 25, used: 0 },
+            { productId: 4, quantity: 30, used: 0 },
+            { productId: 9, quantity: 28, used: 0 }
         ],
         status: 'Còn hàng'
     },
     {
         id: 'L002',
-        date: '2024-01-20',
-        supplier: 'Công ty Gạch Men ABC',
+        date: '2024-01-18',
+        supplier: 'Công ty Gạch Bình Dương',
         products: [
-            { productId: 1, quantity: 500, used: 0 },
-            { productId: 3, quantity: 800, used: 0 }
+            { productId: 2, quantity: 20, used: 0 },
+            { productId: 7, quantity: 12, used: 0 },
+            { productId: 10, quantity: 35, used: 0 }
         ],
         status: 'Còn hàng'
     },
     {
         id: 'L003',
-        date: '2024-01-25',
-        supplier: 'Công ty Gạch Granite XYZ',
+        date: '2024-01-22',
+        supplier: 'Công ty Gạch Long An',
         products: [
-            { productId: 2, quantity: 500, used: 0 },
-            { productId: 4, quantity: 300, used: 0 },
-            { productId: 5, quantity: 200, used: 0 }
+            { productId: 3, quantity: 15, used: 0 },
+            { productId: 6, quantity: 22, used: 0 },
+            { productId: 8, quantity: 8, used: 0 }
         ],
         status: 'Còn hàng'
     }
 ];
 
-let currentOrderId = 1;
+let currentOrderId = 3;
 let currentBatchId = 4;
 
 // Utility functions
@@ -226,27 +562,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Load data from localStorage
 function loadData() {
-    const savedInventory = localStorage.getItem('warehouse_inventory');
-    const savedOrders = localStorage.getItem('warehouse_orders');
-    const savedBatches = localStorage.getItem('warehouse_batches');
-    const savedOrderId = localStorage.getItem('warehouse_current_order_id');
-    const savedBatchId = localStorage.getItem('warehouse_current_batch_id');
+    // Clear old data to use new sample data
+    localStorage.removeItem('warehouse_inventory');
+    localStorage.removeItem('warehouse_orders');
+    localStorage.removeItem('warehouse_batches');
+    localStorage.removeItem('warehouse_current_order_id');
+    localStorage.removeItem('warehouse_current_batch_id');
     
-    if (savedInventory) {
-        inventory = JSON.parse(savedInventory);
-    }
-    if (savedOrders) {
-        orders = JSON.parse(savedOrders);
-    }
-    if (savedBatches) {
-        batches = JSON.parse(savedBatches);
-    }
-    if (savedOrderId) {
-        currentOrderId = parseInt(savedOrderId);
-    }
-    if (savedBatchId) {
-        currentBatchId = parseInt(savedBatchId);
-    }
+    // Use the new sample data defined above
+    // inventory, orders, batches are already initialized with new data
 }
 
 // Save data to localStorage
@@ -368,6 +692,9 @@ function showPage(pageId) {
             break;
         case 'reports':
             updateReportsDisplay();
+            break;
+        case 'import':
+            initializeImportPage();
             break;
     }
 }
@@ -1343,15 +1670,37 @@ function addOrderItem() {
 
 function createImportItemRow() {
     const div = document.createElement('div');
-    div.className = 'form-row';
+    div.className = 'form-row import-items';
     div.innerHTML = `
         <div class="form-group">
             <label>Mã SP</label>
-            <input type="text" class="import-code" placeholder="VD: G001">
+            <div class="search-container">
+                <input type="text" class="import-code" placeholder="VD: GOT-CER-3060-WK">
+                <div class="search-suggestions" style="display: none;"></div>
+            </div>
         </div>
         <div class="form-group">
             <label>Tên SP</label>
-            <input type="text" class="import-name" placeholder="Tên sản phẩm">
+            <div class="search-container">
+                <input type="text" class="import-name" placeholder="Tên sản phẩm">
+                <div class="search-suggestions" style="display: none;"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Danh mục</label>
+            <select class="import-category">
+                <option value="Gạch ốp tường">Gạch ốp tường</option>
+                <option value="Gạch lát nền">Gạch lát nền</option>
+                <option value="Gạch trang trí">Gạch trang trí</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Kích thước</label>
+            <input type="text" class="import-size" placeholder="VD: 30x60cm">
+        </div>
+        <div class="form-group">
+            <label>Màu định nghĩa</label>
+            <input type="text" class="import-color" placeholder="VD: Trắng kem">
         </div>
         <div class="form-group">
             <label>Số lượng nhập</label>
@@ -1372,14 +1721,126 @@ function createImportItemRow() {
             </button>
         </div>
     `;
+    
+    // Setup event listeners for the new row
+    setupImportItemListeners(div);
+    
     div.querySelector('.remove-import-item').addEventListener('click', () => div.remove());
     return div;
+}
+
+function setupImportItemListeners(row) {
+    const codeInput = row.querySelector('.import-code');
+    const nameInput = row.querySelector('.import-name');
+    const categorySelect = row.querySelector('.import-category');
+    const sizeInput = row.querySelector('.import-size');
+    const colorInput = row.querySelector('.import-color');
+    const priceInput = row.querySelector('.import-price');
+    const referencePriceInput = row.querySelector('.import-reference-price');
+    
+    // Setup code input suggestions
+    codeInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        if (query.length < 2) {
+            hideSuggestions(this);
+            return;
+        }
+        
+        const suggestions = inventory.filter(item => 
+            item.code.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5);
+        
+        showSuggestions(this, suggestions, 'code');
+    });
+    
+    // Setup name input suggestions
+    nameInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        if (query.length < 2) {
+            hideSuggestions(this);
+            return;
+        }
+        
+        const suggestions = inventory.filter(item => 
+            item.name.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5);
+        
+        showSuggestions(this, suggestions, 'name');
+    });
+    
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!row.contains(e.target)) {
+            hideSuggestions(codeInput);
+            hideSuggestions(nameInput);
+        }
+    });
+}
+
+function showSuggestions(input, suggestions, type) {
+    const container = input.parentElement;
+    const suggestionsDiv = container.querySelector('.search-suggestions');
+    
+    if (suggestions.length === 0) {
+        hideSuggestions(input);
+        return;
+    }
+    
+    suggestionsDiv.innerHTML = suggestions.map(item => `
+        <div class="suggestion-item" data-item='${JSON.stringify(item)}'>
+            <div class="suggestion-code">${item.code}</div>
+            <div class="suggestion-name">${item.name}</div>
+            <div class="suggestion-details">${item.category} - ${item.size} - ${item.color}</div>
+        </div>
+    `).join('');
+    
+    suggestionsDiv.style.display = 'block';
+    
+    // Add click listeners to suggestions
+    suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const product = JSON.parse(this.dataset.item);
+            fillProductInfo(input, product);
+            hideSuggestions(input);
+        });
+    });
+}
+
+function hideSuggestions(input) {
+    const container = input.parentElement;
+    const suggestionsDiv = container.querySelector('.search-suggestions');
+    suggestionsDiv.style.display = 'none';
+}
+
+function fillProductInfo(input, product) {
+    const row = input.closest('.form-row');
+    
+    // Fill all fields with product information
+    row.querySelector('.import-code').value = product.code;
+    row.querySelector('.import-name').value = product.name;
+    row.querySelector('.import-category').value = product.category;
+    row.querySelector('.import-size').value = product.size;
+    row.querySelector('.import-color').value = product.color;
+    row.querySelector('.import-price').value = product.importPrice || 0;
+    row.querySelector('.import-reference-price').value = product.referencePrice || 0;
+}
+
+function initializeImportPage() {
+    const container = document.getElementById('import-items');
+    if (!container) return;
+    
+    // Clear existing content
+    container.innerHTML = '';
+    
+    // Add first row
+    addImportItem();
 }
 
 function addImportItem() {
     const container = document.getElementById('import-items');
     if (!container) return;
-    container.appendChild(createImportItemRow());
+    const newRow = createImportItemRow();
+    container.appendChild(newRow);
 }
 
 function handleCreateOrder(e) {
@@ -1428,17 +1889,29 @@ function handleCreateOrder(e) {
 
 function handleImportProducts(e) {
     e.preventDefault();
+    const batchCode = document.getElementById('batch-code').value.trim();
     const supplier = document.getElementById('supplier').value.trim();
     const date = document.getElementById('import-date').value || new Date().toISOString().slice(0,10);
     const itemsContainer = document.getElementById('import-items');
     const rows = itemsContainer ? itemsContainer.querySelectorAll('.form-row') : [];
     let productsToAdd = [];
+    
+    // Check if batch code already exists
+    if (batches.find(b => b.id === batchCode)) {
+        showToast(`Mã lô ${batchCode} đã tồn tại. Vui lòng chọn mã khác.`, 'error');
+        return;
+    }
+    
     rows.forEach(r => {
         const code = r.querySelector('.import-code').value.trim();
         const name = r.querySelector('.import-name').value.trim();
+        const category = r.querySelector('.import-category').value.trim();
+        const size = r.querySelector('.import-size').value.trim();
+        const color = r.querySelector('.import-color').value.trim();
         const qty = parseInt(r.querySelector('.import-qty').value) || 0;
         const price = parseInt(r.querySelector('.import-price').value) || 0;
         const referencePrice = parseInt(r.querySelector('.import-reference-price').value) || 0;
+        
         if (code && name && qty > 0) {
             // Update or insert inventory item
             let item = inventory.find(p => p.code === code);
@@ -1446,12 +1919,23 @@ function handleImportProducts(e) {
                 item = {
                     id: inventory.length ? Math.max(...inventory.map(i=>i.id))+1 : 1,
                     code, name,
-                    category: 'Khác', unit: 'Viên', size: '', color: '',
-                    importPrice: price, referencePrice: referencePrice || price,
-                    stock: 0, supplier,
+                    category: category || 'Khác', 
+                    unit: 'Hộp', 
+                    size: size || '', 
+                    color: color || '',
+                    importPrice: price, 
+                    referencePrice: referencePrice || price,
+                    stock: 0, 
+                    supplier,
                     batches: []
                 };
                 inventory.push(item);
+            } else {
+                // Update existing item
+                item.name = name;
+                item.category = category || item.category;
+                item.size = size || item.size;
+                item.color = color || item.color;
             }
             item.importPrice = price || item.importPrice;
             if (referencePrice > 0) {
@@ -1461,19 +1945,22 @@ function handleImportProducts(e) {
             productsToAdd.push({ productId: item.id, quantity: qty, used: 0 });
         }
     });
-    const batchId = `L${String(currentBatchId).padStart(3, '0')}`;
-    currentBatchId += 1;
-    batches.unshift({ id: batchId, date: String(date), supplier, products: productsToAdd, status: 'Còn hàng' });
+    
+    if (productsToAdd.length === 0) {
+        showToast('Vui lòng nhập ít nhất một sản phẩm', 'error');
+        return;
+    }
+    
+    batches.unshift({ id: batchCode, date: String(date), supplier, products: productsToAdd, status: 'Còn hàng' });
     // Link batches to inventory
     productsToAdd.forEach(p => {
         const item = inventory.find(x => x.id === p.productId);
-        if (item) item.batches.push({ batchId, quantity: p.quantity, used: 0 });
+        if (item) item.batches.push({ batchId: batchCode, quantity: p.quantity, used: 0 });
     });
     saveData();
     updateInventoryDisplay();
     updateBatchesDisplay();
-    showToast(`Đã nhập kho lô ${batchId}`, 'success');
+    showToast(`Đã nhập kho lô ${batchCode}`, 'success');
     e.target.reset();
-    const container = document.getElementById('import-items');
-    if (container) { container.innerHTML = ''; addImportItem(); }
+    initializeImportPage();
 }
