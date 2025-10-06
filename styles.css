@@ -396,7 +396,7 @@ tbody tr:last-child td {
 }
 
 .form-row.import-items {
-    grid-template-columns: 1fr 1.5fr 120px 100px 120px 80px 120px 120px 60px;
+    grid-template-columns: 1fr 1.5fr 120px 100px 120px 80px 120px 60px;
 }
 
 .form-group {
@@ -917,6 +917,31 @@ tbody tr:last-child td {
 
 .font-bold { font-weight: 700; }
 .font-semibold { font-weight: 600; }
+
+/* Debts table specific (inherits global table styles) */
+#debts-table th:nth-child(6),
+#debts-table td:nth-child(6),
+#debts-table th:nth-child(4),
+#debts-table td:nth-child(4),
+#debts-table th:nth-child(5),
+#debts-table td:nth-child(5),
+#debts-table th:nth-child(7),
+#debts-table td:nth-child(7) {
+    text-align: right;
+}
+
+#debts-table td .btn {
+    margin-right: 6px;
+}
+
+/* Debt history notice */
+#debt-history {
+    padding: 12px 14px;
+    background: #fff7ed; /* orange-50 */
+    border: 1px solid #fdba74; /* orange-300 */
+    color: #7c2d12; /* orange-900 */
+    border-radius: 8px;
+}
 .font-medium { font-weight: 500; }
 
 .text-sm { font-size: 12px; }

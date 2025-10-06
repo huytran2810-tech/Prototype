@@ -469,6 +469,45 @@ let orders = [
         ],
         status: 'Đang xử lý',
         total: 2160000
+    },
+    {
+        id: 'DH003',
+        customer: 'Công ty Xây dựng ABC',
+        phone: '0901234567',
+        address: '123 Đường ABC, Quận 1, TP.HCM',
+        date: '2024-01-24',
+        items: [
+            { productId: 5, quantity: 4, price: 600000 },
+            { productId: 7, quantity: 2, price: 780000 }
+        ],
+        status: 'Hoàn thành',
+        total: 3960000
+    },
+    {
+        id: 'DH004',
+        customer: 'Nhà thầu XYZ',
+        phone: '0907654321',
+        address: '456 Đường XYZ, Quận 3, TP.HCM',
+        date: '2024-01-26',
+        items: [
+            { productId: 10, quantity: 10, price: 520000 },
+            { productId: 12, quantity: 8, price: 370000 }
+        ],
+        status: 'Đang xử lý',
+        total: 8160000
+    },
+    {
+        id: 'DH005',
+        customer: 'Cửa hàng VLXD Minh Tâm',
+        phone: '0912345678',
+        address: '789 Đường DEF, Quận 5, TP.HCM',
+        date: '2024-01-25',
+        items: [
+            { productId: 1, quantity: 2, price: 520000 },
+            { productId: 3, quantity: 5, price: 320000 }
+        ],
+        status: 'Hoàn thành',
+        total: 2640000
     }
 ];
 
@@ -510,6 +549,11 @@ let batches = [
 
 let currentOrderId = 3;
 let currentBatchId = 4;
+let payments = [
+    { customerName: 'Công ty Xây dựng ABC', customerPhone: '0901234567', amount: 1000000, date: '2024-01-25', note: 'Thanh toán đợt 1' },
+    { customerName: 'Công ty Xây dựng ABC', customerPhone: '0901234567', amount: 500000, date: '2024-01-28', note: 'Thanh toán đợt 2' },
+    { customerName: 'Nhà thầu XYZ', customerPhone: '0907654321', amount: 300000, date: '2024-01-26', note: 'Trả trước' }
+];
 
 // Utility functions
 function formatCurrency(amount) {
@@ -578,6 +622,7 @@ function saveData() {
     localStorage.setItem('warehouse_inventory', JSON.stringify(inventory));
     localStorage.setItem('warehouse_orders', JSON.stringify(orders));
     localStorage.setItem('warehouse_batches', JSON.stringify(batches));
+    localStorage.setItem('warehouse_payments', JSON.stringify(payments));
     localStorage.setItem('warehouse_current_order_id', currentOrderId.toString());
     localStorage.setItem('warehouse_current_batch_id', currentBatchId.toString());
 }
@@ -605,6 +650,12 @@ function setupEventListeners() {
         filterTable('inventory-summary-table');
         filterTable('inventory-detail-table');
     });
+    const searchDebts = document.getElementById('search-debts');
+    if (searchDebts) {
+        searchDebts.addEventListener('input', function() {
+            filterTable('debts-table');
+        });
+    }
     
     // Column filters
     setupColumnFilters();
@@ -620,6 +671,17 @@ function setupEventListeners() {
     if (orderForm) orderForm.addEventListener('submit', handleCreateOrder);
     const importForm = document.getElementById('import-form');
     if (importForm) importForm.addEventListener('submit', handleImportProducts);
+
+    // Debt history lookup when typing phone on create order
+    const phoneInput = document.getElementById('customer-phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            showDebtHistoryByPhone(this.value.trim());
+        });
+        phoneInput.addEventListener('blur', function() {
+            showDebtHistoryByPhone(this.value.trim());
+        });
+    }
     
     // Export buttons
     document.getElementById('export-inventory-btn').addEventListener('click', function() {
@@ -637,6 +699,12 @@ function setupEventListeners() {
     document.getElementById('export-summary-btn').addEventListener('click', function() {
         exportToCSV('inventory-summary-table', 'bao_cao_ton_kho_tong_quat.csv');
     });
+    const exportDebtsBtn = document.getElementById('export-debts-btn');
+    if (exportDebtsBtn) {
+        exportDebtsBtn.addEventListener('click', function() {
+            exportToCSV('debts-table', 'quan_ly_cong_no.csv');
+        });
+    }
     
     // Modal close buttons
     document.querySelectorAll('.close-modal').forEach(btn => {
@@ -696,6 +764,9 @@ function showPage(pageId) {
         case 'import':
             initializeImportPage();
             break;
+        case 'debts':
+            updateDebtsDisplay();
+            break;
     }
 }
 
@@ -704,21 +775,24 @@ let currentPage = {
     inventory: 1,
     orders: 1,
     batches: 1,
-    reports: 1
+    reports: 1,
+    debts: 1
 };
 
 let pageSize = {
     inventory: 25,
     orders: 25,
     batches: 25,
-    reports: 25
+    reports: 25,
+    debts: 25
 };
 
 let filteredData = {
     inventory: [],
     orders: [],
     batches: [],
-    reports: []
+    reports: [],
+    debts: []
 };
 
 // Inventory functions
@@ -757,7 +831,6 @@ function updateInventoryDisplay() {
             <td>${item.size}</td>
             <td>${item.color}</td>
             <td>${item.unit}</td>
-            <td>${formatCurrency(item.importPrice)}</td>
             <td>${formatCurrency(item.referencePrice)}</td>
             <td>${formatNumber(item.stock)}</td>
             <td><span class="status-badge ${getStatusClass(status)}">${status}</span></td>
@@ -1304,7 +1377,7 @@ function filterTable(tableId) {
 
 // Setup column filters
 function setupColumnFilters() {
-    const tables = ['inventory-table', 'orders-table', 'inventory-summary-table', 'inventory-detail-table', 'batches-table'];
+    const tables = ['inventory-table', 'orders-table', 'inventory-summary-table', 'inventory-detail-table', 'batches-table', 'debts-table'];
     
     tables.forEach(tableId => {
         const table = document.getElementById(tableId);
@@ -1351,6 +1424,159 @@ function exportToCSV(tableId, filename) {
     document.body.removeChild(link);
 }
 
+function showDebtHistoryByPhone(phone) {
+    const box = document.getElementById('debt-history');
+    if (!box) return;
+    if (!phone) { box.style.display = 'none'; box.innerHTML = ''; return; }
+    const ordersByPhone = orders.filter(o => (o.customerPhone || o.phone || '') === phone);
+    if (ordersByPhone.length === 0) { box.style.display = 'none'; box.innerHTML = ''; return; }
+    const name = ordersByPhone[0].customerName || ordersByPhone[0].customer || '';
+    const address = ordersByPhone[0].customerAddress || ordersByPhone[0].address || '';
+    const totalOrders = ordersByPhone.length;
+    const totalAmount = ordersByPhone.reduce((s,o)=>s+(o.total||0),0);
+    const paidAmount = payments
+        .filter(p => (p.customerPhone||'') === phone)
+        .reduce((s,p)=>s+(p.amount||0),0);
+    const debtAmount = Math.max(0, totalAmount - paidAmount);
+    let list = '';
+    ordersByPhone.slice(0,5).forEach(o => {
+        list += `<li>#${o.id} • ${o.date} • ${formatCurrency(o.total)} • ${o.status}</li>`;
+    });
+    const more = ordersByPhone.length > 5 ? `<div style="margin-top:6px;color:#824">... và ${ordersByPhone.length-5} đơn khác</div>` : '';
+    box.innerHTML = `
+        <div><strong>${name}</strong> • ${phone}</div>
+        <div>${address}</div>
+        <div style="margin:6px 0">Đã mua: <strong>${totalOrders}</strong> đơn • Tổng mua: <strong>${formatCurrency(totalAmount)}</strong></div>
+        <div>Đã trả: <strong style="color:#166534">${formatCurrency(paidAmount)}</strong> • Còn nợ: <strong style="color:#991b1b">${formatCurrency(debtAmount)}</strong></div>
+        <ul style="margin:8px 0 0 16px">${list}</ul>
+        ${more}
+    `;
+    box.style.display = 'block';
+}
+
+// Debts management
+function computeCustomerDebts() {
+    const paymentsMap = {};
+    payments.forEach(p => {
+        const key = (p.customerName || '') + '|' + (p.customerPhone || '');
+        paymentsMap[key] = (paymentsMap[key] || 0) + (p.amount || 0);
+    });
+    const customersMap = {};
+    orders.forEach(o => {
+        const key = (o.customerName || o.customer || '') + '|' + (o.customerPhone || o.phone || '');
+        if (!customersMap[key]) {
+            customersMap[key] = { name: (o.customerName || o.customer || ''), phone: (o.customerPhone || o.phone || ''), address: (o.customerAddress || o.address || ''), orders: 0, total: 0, paid: 0 };
+        }
+        customersMap[key].orders += 1;
+        customersMap[key].total += (o.total || 0);
+    });
+    Object.keys(customersMap).forEach(key => {
+        customersMap[key].paid = paymentsMap[key] || 0;
+        customersMap[key].debt = Math.max(0, customersMap[key].total - customersMap[key].paid);
+    });
+    return Object.values(customersMap);
+}
+
+function updateDebtsDisplay() {
+    const tbody = document.getElementById('debts-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const data = computeCustomerDebts();
+    filteredData.debts = data; // simple: global search handled by filterTable
+    // pagination
+    const totalRecords = filteredData.debts.length;
+    const totalPages = Math.ceil(totalRecords / pageSize.debts);
+    const startIndex = (currentPage.debts - 1) * pageSize.debts;
+    const endIndex = Math.min(startIndex + pageSize.debts, totalRecords);
+    document.getElementById('debts-total-records').textContent = totalRecords;
+    const current = filteredData.debts.slice(startIndex, endIndex);
+    current.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${c.name}</td>
+            <td>${c.phone}</td>
+            <td>${c.address || ''}</td>
+            <td>${c.orders}</td>
+            <td>${formatCurrency(c.total)}</td>
+            <td>${formatCurrency(c.paid)}</td>
+            <td>${formatCurrency(c.debt)}</td>
+            <td>
+                <button class="btn btn-small btn-secondary" onclick="viewCustomerOrders('${c.name}','${c.phone}')"><i class="fas fa-eye"></i> Xem đơn</button>
+                <button class="btn btn-small btn-primary" onclick="openPaymentModal('${c.name}','${c.phone}')"><i class="fas fa-plus"></i> Thu tiền</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+    updatePagination('debts', totalPages);
+}
+
+function openPaymentModal(name, phone) {
+    const modal = document.getElementById('payment-modal');
+    if (!modal) return;
+    document.getElementById('payment-customer').value = name;
+    document.getElementById('payment-phone').value = phone;
+    document.getElementById('payment-amount').value = 0;
+    document.getElementById('payment-date').value = new Date().toISOString().slice(0,10);
+    document.getElementById('payment-note').value = '';
+    modal.style.display = 'block';
+    const form = document.getElementById('payment-form');
+    form.onsubmit = (e) => { e.preventDefault(); savePayment(); };
+}
+
+function savePayment() {
+    const name = document.getElementById('payment-customer').value.trim();
+    const phone = document.getElementById('payment-phone').value.trim();
+    const amount = parseFloat(document.getElementById('payment-amount').value) || 0;
+    const date = String(document.getElementById('payment-date').value) || new Date().toISOString().slice(0,10);
+    const note = document.getElementById('payment-note').value.trim();
+    if (!name || amount <= 0) {
+        showToast('Vui lòng nhập số tiền hợp lệ', 'error');
+        return;
+    }
+    payments.push({ customerName: name, customerPhone: phone, amount, date, note });
+    saveData();
+    document.getElementById('payment-modal').style.display = 'none';
+    updateDebtsDisplay();
+    showToast('Đã ghi nhận thanh toán', 'success');
+}
+
+function viewCustomerOrders(name, phone) {
+    const modal = document.getElementById('customer-orders-modal');
+    const content = document.getElementById('customer-orders-content');
+    if (!modal || !content) return;
+    const customerOrders = orders.filter(o => (o.customerName === name || o.customer === name) && ((o.customerPhone || o.phone || '') === phone));
+    if (customerOrders.length === 0) {
+        content.innerHTML = '<p>Không có đơn hàng nào.</p>';
+    } else {
+        let rows = '';
+        customerOrders.forEach(o => {
+            rows += `
+                <tr>
+                    <td>${o.id}</td>
+                    <td>${o.date}</td>
+                    <td>${formatCurrency(o.total)}</td>
+                    <td><span class="status-badge ${getStatusClass(o.status)}">${o.status}</span></td>
+                    <td><button class="btn btn-small" onclick="viewOrderDetail('${o.id}')">Xem</button></td>
+                </tr>
+            `;
+        });
+        content.innerHTML = `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Ngày</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+    }
+    modal.style.display = 'block';
+}
 // Toast notifications
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
@@ -1532,6 +1758,9 @@ function goToPage(tableType, page) {
         case 'reports':
             updateReportsDisplay();
             break;
+        case 'debts':
+            updateDebtsDisplay();
+            break;
     }
 }
 
@@ -1550,6 +1779,9 @@ function changePageSize(tableType, newSize) {
             break;
         case 'reports':
             updateReportsDisplay();
+            break;
+        case 'debts':
+            updateDebtsDisplay();
             break;
     }
 }
@@ -1609,6 +1841,25 @@ function setupPaginationListeners() {
     document.getElementById('batches-page-size').addEventListener('change', (e) => {
         changePageSize('batches', e.target.value);
     });
+
+    // Debts pagination
+    const debtsPrev = document.getElementById('debts-prev');
+    const debtsNext = document.getElementById('debts-next');
+    const debtsPageSize = document.getElementById('debts-page-size');
+    if (debtsPrev) debtsPrev.addEventListener('click', () => {
+        if (currentPage.debts > 1) {
+            goToPage('debts', currentPage.debts - 1);
+        }
+    });
+    if (debtsNext) debtsNext.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.debts.length / pageSize.debts);
+        if (currentPage.debts < totalPages) {
+            goToPage('debts', currentPage.debts + 1);
+        }
+    });
+    if (debtsPageSize) debtsPageSize.addEventListener('change', (e) => {
+        changePageSize('debts', e.target.value);
+    });
 }
 
 // Initialize the application
@@ -1621,12 +1872,16 @@ document.addEventListener('DOMContentLoaded', function() {
     updateOrdersDisplay();
     updateBatchesDisplay();
     updateReportsDisplay();
+    updateDebtsDisplay();
     setupColumnFilters();
     // expose functions for inline handlers
     window.viewOrderDetail = viewOrderDetail;
     window.viewProductBatches = viewProductBatches;
     window.addOrderItem = addOrderItem;
     window.addImportItem = addImportItem;
+    window.openPaymentModal = openPaymentModal;
+    window.savePayment = savePayment;
+    window.viewCustomerOrders = viewCustomerOrders;
 });
 
 // -----------------------------
@@ -1707,10 +1962,6 @@ function createImportItemRow() {
             <input type="number" class="import-qty" min="1" value="1">
         </div>
         <div class="form-group">
-            <label>Giá nhập (VNĐ)</label>
-            <input type="number" class="import-price" min="0" value="0">
-        </div>
-        <div class="form-group">
             <label>Giá tham chiếu (VNĐ)</label>
             <input type="number" class="import-reference-price" min="0" value="0">
         </div>
@@ -1735,7 +1986,6 @@ function setupImportItemListeners(row) {
     const categorySelect = row.querySelector('.import-category');
     const sizeInput = row.querySelector('.import-size');
     const colorInput = row.querySelector('.import-color');
-    const priceInput = row.querySelector('.import-price');
     const referencePriceInput = row.querySelector('.import-reference-price');
     
     // Setup code input suggestions
@@ -1821,7 +2071,6 @@ function fillProductInfo(input, product) {
     row.querySelector('.import-category').value = product.category;
     row.querySelector('.import-size').value = product.size;
     row.querySelector('.import-color').value = product.color;
-    row.querySelector('.import-price').value = product.importPrice || 0;
     row.querySelector('.import-reference-price').value = product.referencePrice || 0;
 }
 
@@ -1909,7 +2158,6 @@ function handleImportProducts(e) {
         const size = r.querySelector('.import-size').value.trim();
         const color = r.querySelector('.import-color').value.trim();
         const qty = parseInt(r.querySelector('.import-qty').value) || 0;
-        const price = parseInt(r.querySelector('.import-price').value) || 0;
         const referencePrice = parseInt(r.querySelector('.import-reference-price').value) || 0;
         
         if (code && name && qty > 0) {
@@ -1923,8 +2171,8 @@ function handleImportProducts(e) {
                     unit: 'Hộp', 
                     size: size || '', 
                     color: color || '',
-                    importPrice: price, 
-                    referencePrice: referencePrice || price,
+                    importPrice: referencePrice || 0,
+                    referencePrice: referencePrice || 0,
                     stock: 0, 
                     supplier,
                     batches: []
@@ -1937,8 +2185,8 @@ function handleImportProducts(e) {
                 item.size = size || item.size;
                 item.color = color || item.color;
             }
-            item.importPrice = price || item.importPrice;
             if (referencePrice > 0) {
+                item.importPrice = referencePrice;
                 item.referencePrice = referencePrice;
             }
             item.stock += qty;

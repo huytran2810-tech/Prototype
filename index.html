@@ -35,6 +35,9 @@
                     <button class="nav-btn" data-page="reports">
                         <i class="fas fa-chart-bar"></i> Báo Cáo
                     </button>
+                    <button class="nav-btn" data-page="debts">
+                        <i class="fas fa-hand-holding-usd"></i> Công Nợ
+                    </button>
                 </nav>
             </div>
         </header>
@@ -104,27 +107,21 @@
                                     </div>
                                 </th>
                                 <th>
-                                    Giá Nhập
+                                    Giá Tham Chiếu
                                     <div class="column-filter">
                                         <input type="number" class="filter-input" data-column="6" placeholder="Giá từ...">
                                     </div>
                                 </th>
                                 <th>
-                                    Giá Tham Chiếu
-                                    <div class="column-filter">
-                                        <input type="number" class="filter-input" data-column="7" placeholder="Giá từ...">
-                                    </div>
-                                </th>
-                                <th>
                                     Tồn Kho
                                     <div class="column-filter">
-                                        <input type="number" class="filter-input" data-column="8" placeholder="Số lượng...">
+                                        <input type="number" class="filter-input" data-column="7" placeholder="Số lượng...">
                                     </div>
                                 </th>
                                 <th>
                                     Trạng Thái
                                     <div class="column-filter">
-                                        <select class="filter-select" data-column="9">
+                                        <select class="filter-select" data-column="8">
                                             <option value="">Tất cả</option>
                                             <option value="Còn hàng">Còn hàng</option>
                                             <option value="Sắp hết">Sắp hết</option>
@@ -163,6 +160,143 @@
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Modal chi tiết đơn theo khách hàng -->
+            <div id="customer-orders-modal" class="modal">
+                <div class="modal-content" style="max-width: 900px; width: 95%;">
+                    <span class="close-modal">&times;</span>
+                    <h3>Đơn hàng của khách</h3>
+                    <div id="customer-orders-content"></div>
+                </div>
+            </div>
+
+            <!-- Trang Công Nợ -->
+            <div id="debts-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-hand-holding-usd"></i> Quản Lý Công Nợ</h2>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <input type="text" id="search-debts" placeholder="Tìm kiếm theo tên KH, SĐT...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <button class="btn btn-success" id="export-debts-btn">
+                            <i class="fas fa-file-excel"></i> Xuất Excel
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="debts-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Khách Hàng
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="0" placeholder="Lọc tên KH...">
+                                    </div>
+                                </th>
+                                <th>
+                                    SĐT
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="1" placeholder="Lọc SĐT...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Địa Chỉ
+                                    <div class="column-filter">
+                                        <input type="text" class="filter-input" data-column="2" placeholder="Lọc địa chỉ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Số Đơn
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="3" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Tổng Mua
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="4" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Đã Thanh Toán
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="5" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>
+                                    Còn Nợ
+                                    <div class="column-filter">
+                                        <input type="number" class="filter-input" data-column="6" placeholder="Từ...">
+                                    </div>
+                                </th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="debts-tbody"></tbody>
+                    </table>
+                    <div class="table-footer">
+                        <div class="total-records">Tổng: <span id="debts-total-records">0</span> bản ghi</div>
+                        <div class="page-size-selector">
+                            <label>Hiển thị:</label>
+                            <select id="debts-page-size">
+                                <option value="10">10</option>
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>bản ghi/trang</span>
+                        </div>
+                    </div>
+                    <div class="pagination" id="debts-pagination">
+                        <button id="debts-prev" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div id="debts-page-numbers"></div>
+                        <button id="debts-next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal ghi nhận thanh toán -->
+            <div id="payment-modal" class="modal">
+                <div class="modal-content" style="max-width: 720px; width: 90%;">
+                    <span class="close-modal">&times;</span>
+                    <h3>Ghi Nhận Thanh Toán</h3>
+                    <form id="payment-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Khách hàng</label>
+                                <input type="text" id="payment-customer" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>SĐT</label>
+                                <input type="text" id="payment-phone" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Số tiền</label>
+                                <input type="number" id="payment-amount" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày</label>
+                                <input type="date" id="payment-date">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label>Ghi chú</label>
+                                <input type="text" id="payment-note" placeholder="Ghi chú (tuỳ chọn)">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                        <input type="hidden" id="payment-customer-id">
+                    </form>
                 </div>
             </div>
 
@@ -320,6 +454,7 @@
                                 <input type="tel" id="customer-phone" required>
                             </div>
                         </div>
+                        <div id="debt-history" class="notice" style="display:none"></div>
                         <div class="form-group">
                             <label for="customer-address">Địa Chỉ *</label>
                             <textarea id="customer-address" rows="2" required></textarea>
